@@ -1,0 +1,2926 @@
+Home
+Gemini API
+Models
+API Reference
+Was this helpful?
+
+Send feedbackGemini API reference
+The Gemini API lets you access the latest generative models from Google. This API reference provides detailed information for the classes and methods available in the Gemini API SDKs. Pick a language and follow the setup steps to get started building.
+
+Python Node.js Go Dart (Flutter) Android Swift Web
+
+Install the Gemini API library
+Note: We're rolling out a new set of Gemini API libraries, the Google Gen AI SDK.
+Using Node.js v18+, install the Google Gen AI SDK for TypeScript and JavaScript using the following npm command:
+
+
+npm install @google/genai
+Make your first request
+Use the generateContent method to send a request to the Gemini API.
+
+
+import { GoogleGenAI } from "@google/genai";
+
+const ai = new GoogleGenAI({ apiKey: "YOUR_API_KEY" });
+
+async function main() {
+  const response = await ai.models.generateContent({
+    model: "gemini-2.0-flash",
+    contents: "Explain how AI works in a few words",
+  });
+  console.log(response.text);
+}
+
+await main();
+
+
+Model variant	Input(s)	Output	Optimized for
+Gemini 2.5 Pro Experimental
+gemini-2.5-pro-exp-03-25	Audio, images, videos, and text	Text	Enhanced thinking and reasoning, multimodal understanding, advanced coding, and more
+
+Property	Description
+Model code	gemini-2.5-pro-exp-03-25
+Supported data types
+Inputs
+
+Audio, images, video, and text
+
+Output
+
+Text
+
+Token limits[*]
+Input token limit
+
+1,048,576
+
+Output token limit
+
+65,536
+
+Capabilities
+Structured outputs
+
+Supported
+
+Caching
+
+Not supported
+
+Tuning
+
+Not supported
+
+Function calling
+
+Supported
+
+Code execution
+
+Supported
+
+Search grounding
+
+Supported
+
+Image generation
+
+Not supported
+
+Native tool use
+
+Supported
+
+Audio generation
+
+Not supported
+
+Live API
+
+Not supported
+
+Thinking
+
+Supported
+
+Versions	
+Read the model version patterns for more details.
+Experimental: gemini-2.5-pro-exp-03-25
+Latest update	March 2025
+Knowledge cutoff	January 2025
+
+ntroduction to prompt design
+
+Prompt design is the process of creating prompts that elicit the desired response from language models. Writing well structured prompts is an essential part of ensuring accurate, high quality responses from a language model. This page introduces some basic concepts, strategies, and best practices to get you started in designing prompts.
+
+What is a prompt
+A prompt is a natural language request submitted to a language model to receive a response back. Prompts can contain questions, instructions, contextual information, examples, and partial input for the model to complete or continue. After the model receives a prompt, depending on the type of model being used, it can generate text, embeddings, code, images, videos, music, and more.
+
+Prompt content types
+Prompts can include one or more of the following types of content:
+
+Input (required)
+Context (optional)
+Examples (optional)
+Input
+An input is the text in the prompt that you want the model to provide a response for, and it's a required content type. Inputs can be a question that the model answers (question input), a task the model performs (task input), an entity the model operates on (entity input), or partial input that the model completes or continues (completion input).
+
+Question input
+A question input is a question that you ask the model that the model provides an answer to.
+
+Prompt:
+
+What's a good name for a flower shop that specializes in selling bouquets of
+dried flowers? Create a list of 10 options with just the names.
+Response:
+
+Here are 10 names for a flower shop specializing in dried flowers:
+
+1. Everlasting Blooms
+2. Dried & Delightful
+3. The Petal Preserve
+4. Whispers of Wildflowers
+5. Forever Blooms
+6. The Botanical Muse
+7. Timeless Blooms
+8. Dried Flower Co.
+9. Bloom & Co.
+10. The Sun-Kissed Petals
+(gemini-1.5-flash)
+Task input
+A task input is a task that you want the model to perform. For example, you can tell the model to give you ideas or suggestions for something.
+
+Prompt:
+
+Give me a simple list of just the things that I must bring on a camping trip. The list should have 10 items.
+Response:
+
+Here's a list of 10 essential items for a camping trip:
+
+1. **Tent:** Your shelter from the elements.
+2. **Sleeping Bag:** Stay warm and comfortable.
+3. **Sleeping Pad:** Insulation and cushioning for a good night's sleep.
+4. **Headlamp or Flashlight:** Light for nighttime activities.
+5. **First Aid Kit:** Be prepared for minor injuries.
+6. **Water Bottle/Hydration Pack:** Stay hydrated.
+7. **Food and Snacks:** Fuel for your adventures.
+8. **Cooking Gear:** Camp stove, fuel, utensils, etc.
+9. **Knife and Multitool:** Essential for various tasks.
+10. **Camp Chair:** Enjoy your campfire and meals comfortably.
+(gemini-1.5-flash)
+Entity input
+An entity input is what the model performs an action on, such as classify or summarize. This type of input can benefit from the inclusion of instructions.
+
+Prompt:
+
+Classify the following items as [large, small].
+Elephant
+Mouse
+Snail
+Response:
+
+Here's the classification:
+
+* **Elephant:** Large
+* **Mouse:** Small
+* **Snail:** Small
+(gemini-1.5-flash)
+Completion input
+A completion input is text that the model is expected to complete or continue.
+
+Prompt:
+
+Complete the following prompt: Some simple strategies for overcoming writer's block include...
+Response:
+
+Some simple strategies for overcoming writer's block include:
+
+* **Freewriting:** Write non-stop for a set amount of time (5-10 minutes) without worrying about grammar, spelling, or even making sense. Just keep your pen moving and let your thoughts flow freely. This can help you loosen up and access ideas you might not have considered otherwise.
+* **Brainstorming:** Make a list of everything that comes to mind related to your topic, no matter how silly or unrelated it seems. You can also use mind mapping or other visual brainstorming techniques.
+* **Changing your environment:** Sometimes a change of scenery can be all you need to get the creative juices flowing. Go for a walk, work in a coffee shop, or even just move to a different room in your house.
+* **Reading:** Immerse yourself in the work of other writers, especially those who inspire you. Pay attention to their style, their structure, and their use of language.
+* **Taking a break:** Sometimes the best way to overcome writer's block is to simply step away from the project for a while. Go for a walk, watch a movie, listen to music, or do something else that you enjoy. You might be surprised at how much clearer your head feels when you return to your writing.
+* **Focusing on a single element:** Instead of tackling the entire project, focus on a single sentence, paragraph, or scene. Once you get something down on paper, it can be easier to build from there.
+* **Starting with the ending:** If you're stuck on the beginning, try writing the ending first. This can help you to clarify your overall vision for the project and provide a framework for your ideas.
+* **Talking it out:** Share your ideas and challenges with a friend, a writing group, or a writing coach. Discussing your project with someone else can help you to see it from a new perspective and find solutions to your writing problems.
+
+Remember, writer's block is a common experience, and it's not a sign that you're a bad writer. Just be patient with yourself, try some of these strategies, and keep writing!
+(gemini-1.5-flash)
+Context
+Context can be one of the following:
+
+Instructions that specify how the model should behave.
+Information that the model uses or references to generate a response.
+Add contextual information in your prompt when you need to give information to the model, or restrict the boundaries of the responses to only what's within the prompt.
+
+Prompt:
+
+Marbles:
+Color: red
+Number: 12
+Color: blue
+Number: 28
+Color: yellow
+Number: 15
+Color: green
+Number: 17
+
+How many green marbles are there?
+Response:
+
+There are 17 green marbles.
+(gemini-1.5-flash)
+Examples
+Examples are input-output pairs that you include in the prompt to give the model an example of an ideal response. Including examples in the prompt is an effective strategy for customizing the response format.
+
+Prompt:
+
+Classify the following.
+
+
+Text generation
+
+The Gemini API can generate text output in response to various inputs, including text, images, video, and audio. This guide shows you how to generate text using text and image inputs. It also covers streaming, chat, and system instructions.
+
+Text input
+The simplest way to generate text using the Gemini API is to provide the model with a single text-only input, as shown in this example:
+
+Python
+JavaScript
+Go
+REST
+
+import { GoogleGenAI } from "@google/genai";
+
+const ai = new GoogleGenAI({ apiKey: "GEMINI_API_KEY" });
+
+async function main() {
+  const response = await ai.models.generateContent({
+    model: "gemini-2.0-flash",
+    contents: "How does AI work?",
+  });
+  console.log(response.text);
+}
+
+await main();
+Image input
+The Gemini API supports multimodal inputs that combine text and media files. The following example shows how to generate text from text and image input:
+
+Python
+JavaScript
+Go
+REST
+
+import {
+  GoogleGenAI,
+  createUserContent,
+  createPartFromUri,
+} from "@google/genai";
+
+const ai = new GoogleGenAI({ apiKey: "GEMINI_API_KEY" });
+
+async function main() {
+  const image = await ai.files.upload({
+    file: "/path/to/organ.png",
+  });
+  const response = await ai.models.generateContent({
+    model: "gemini-2.0-flash",
+    contents: [
+      createUserContent([
+        "Tell me about this instrument",
+        createPartFromUri(image.uri, image.mimeType),
+      ]),
+    ],
+  });
+  console.log(response.text);
+}
+
+await main();
+Streaming output
+By default, the model returns a response after completing the entire text generation process. You can achieve faster interactions by using streaming to return instances of GenerateContentResponse as they're generated.
+
+Python
+JavaScript
+Go
+REST
+
+import { GoogleGenAI } from "@google/genai";
+
+const ai = new GoogleGenAI({ apiKey: "GEMINI_API_KEY" });
+
+async function main() {
+  const response = await ai.models.generateContentStream({
+    model: "gemini-2.0-flash",
+    contents: "Explain how AI works",
+  });
+
+  for await (const chunk of response) {
+    console.log(chunk.text);
+  }
+}
+
+await main();
+Multi-turn conversations
+The Gemini SDK lets you collect multiple rounds of questions and responses into a chat. The chat format enables users to step incrementally toward answers and to get help with multipart problems. This SDK implementation of chat provides an interface to keep track of conversation history, but behind the scenes it uses the same generateContent method to create the response.
+
+The following code example shows a basic chat implementation:
+
+Python
+JavaScript
+Go
+REST
+
+import { GoogleGenAI } from "@google/genai";
+
+const ai = new GoogleGenAI({ apiKey: "GEMINI_API_KEY" });
+
+async function main() {
+  const chat = ai.chats.create({
+    model: "gemini-2.0-flash",
+    history: [
+      {
+        role: "user",
+        parts: [{ text: "Hello" }],
+      },
+      {
+        role: "model",
+        parts: [{ text: "Great to meet you. What would you like to know?" }],
+      },
+    ],
+  });
+
+  const response1 = await chat.sendMessage({
+    message: "I have 2 dogs in my house.",
+  });
+  console.log("Chat response 1:", response1.text);
+
+  const response2 = await chat.sendMessage({
+    message: "How many paws are in my house?",
+  });
+  console.log("Chat response 2:", response2.text);
+}
+
+await main();
+You can also use streaming with chat, as shown in the following example:
+
+Python
+JavaScript
+Go
+REST
+
+import { GoogleGenAI } from "@google/genai";
+
+const ai = new GoogleGenAI({ apiKey: "GEMINI_API_KEY" });
+
+async function main() {
+  const chat = ai.chats.create({
+    model: "gemini-2.0-flash",
+    history: [
+      {
+        role: "user",
+        parts: [{ text: "Hello" }],
+      },
+      {
+        role: "model",
+        parts: [{ text: "Great to meet you. What would you like to know?" }],
+      },
+    ],
+  });
+
+  const stream1 = await chat.sendMessageStream({
+    message: "I have 2 dogs in my house.",
+  });
+  for await (const chunk of stream1) {
+    console.log(chunk.text);
+    console.log("_".repeat(80));
+  }
+
+  const stream2 = await chat.sendMessageStream({
+    message: "How many paws are in my house?",
+  });
+  for await (const chunk of stream2) {
+    console.log(chunk.text);
+    console.log("_".repeat(80));
+  }
+}
+
+await main();
+Configuration parameters
+Every prompt you send to the model includes parameters that control how the model generates responses. You can configure these parameters, or let the model use the default options.
+
+The following example shows how to configure model parameters:
+
+Python
+JavaScript
+Go
+REST
+
+import { GoogleGenAI } from "@google/genai";
+
+const ai = new GoogleGenAI({ apiKey: "GEMINI_API_KEY" });
+
+async function main() {
+  const response = await ai.models.generateContent({
+    model: "gemini-2.0-flash",
+    contents: "Explain how AI works",
+    config: {
+      maxOutputTokens: 500,
+      temperature: 0.1,
+    },
+  });
+  console.log(response.text);
+}
+
+await main();
+Here are some of the model parameters you can configure. (Naming conventions vary by programming language.)
+
+stopSequences: Specifies the set of character sequences (up to 5) that will stop output generation. If specified, the API will stop at the first appearance of a stop_sequence. The stop sequence won't be included as part of the response.
+temperature: Controls the randomness of the output. Use higher values for more creative responses, and lower values for more deterministic responses. Values can range from [0.0, 2.0].
+maxOutputTokens: Sets the maximum number of tokens to include in a candidate.
+topP: Changes how the model selects tokens for output. Tokens are selected from the most to least probable until the sum of their probabilities equals the topP value. The default topP value is 0.95.
+topK: Changes how the model selects tokens for output. A topK of 1 means the selected token is the most probable among all the tokens in the model's vocabulary, while a topK of 3 means that the next token is selected from among the 3 most probable using the temperature. Tokens are further filtered based on topP with the final token selected using temperature sampling.
+System instructions
+System instructions let you steer the behavior of a model based on your specific use case. When you provide system instructions, you give the model additional context to help it understand the task and generate more customized responses. The model should adhere to the system instructions over the full interaction with the user, enabling you to specify product-level behavior separate from the prompts provided by end users.
+
+You can set system instructions when you initialize your model:
+
+Python
+JavaScript
+Go
+REST
+
+import { GoogleGenAI } from "@google/genai";
+
+const ai = new GoogleGenAI({ apiKey: "GEMINI_API_KEY" });
+
+async function main() {
+  const response = await ai.models.generateContent({
+    model: "gemini-2.0-flash",
+    contents: "Hello there",
+    config: {
+      systemInstruction: "You are a cat. Your name is Neko.",
+    },
+  });
+  console.log(response.text);
+}
+
+await main();
+Then, you can send requests to the model as usual.
+
+Supported models
+The entire Gemini family of models supports text generation. To learn more about the models and their capabilities, see Models.
+
+Prompting tips
+For basic text generation use cases, your prompt might not need to include any output examples, system instructions, or formatting information. This is a zero-shot approach. For some use cases, a one-shot or few-shot prompt might produce output that's more aligned with user expectations. In some cases, you might also want to provide system instructions to help the model understand the task or follow specific guidelines.
+
+
+Code execution
+
+Python Node.js Go REST
+
+The Gemini API code execution feature enables the model to generate and run Python code and learn iteratively from the results until it arrives at a final output. You can use this code execution capability to build applications that benefit from code-based reasoning and that produce text output. For example, you could use code execution in an application that solves equations or processes text.
+
+Code execution is available in both AI Studio and the Gemini API. In AI Studio, you can enable code execution in the right panel under Tools. The Gemini API provides code execution as a tool, similar to function calling. After you add code execution as a tool, the model decides when to use it.
+
+The code execution environment includes the following libraries: altair, chess, cv2, matplotlib, mpmath, numpy, pandas, pdfminer, reportlab, seaborn, sklearn, statsmodels, striprtf, sympy, and tabulate. You can't install your own libraries.
+
+Note: Only matplotlib is supported for graph rendering using code execution.
+Get started with code execution
+This section assumes that you've completed the setup and configuration steps shown in the quickstart.
+
+Enable code execution on the model
+You can enable code execution on the model, as shown here:
+
+
+import { GoogleGenerativeAI } from '@google/generative-ai';
+
+const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+const model = genAI.getGenerativeModel({
+  model: 'gemini-1.5-pro',
+  tools: [
+    {
+      codeExecution: {},
+    },
+  ],
+});
+
+const result = await model.generateContent(
+  'What is the sum of the first 50 prime numbers? ' +
+    'Generate and run code for the calculation, and make sure you get all 50.',
+);
+
+const response = result.response;
+console.log(response.text());
+The output might look something like this:
+
+
+```python
+def is_prime(n):
+  """Checks if a number is prime."""
+  if n <= 1:
+    return False
+  for i in range(2, int(n**0.5) + 1):
+    if n % i == 0:
+      return False
+  return True
+
+def sum_of_primes(n):
+  """Calculates the sum of the first n prime numbers."""
+  primes = []
+  i = 2
+  while len(primes) < n:
+    if is_prime(i):
+      primes.append(i)
+    i += 1
+  return sum(primes)
+
+# Calculate the sum of the first 50 prime numbers
+sum_of_first_50_primes = sum_of_primes(50)
+
+print(f"The sum of the first 50 prime numbers is: {sum_of_first_50_primes}")
+```
+
+**Explanation:**
+
+1. **`is_prime(n)` Function:**
+   - Takes an integer `n` as input.
+   - Returns `False` for numbers less than or equal to 1 (not prime).
+   - Iterates from 2 up to the square root of `n`. If `n` is divisible by any
+     number in this range, it's not prime, and we return `False`.
+   - If the loop completes without finding a divisor, the number is prime, and
+     we return `True`.
+
+2. **`sum_of_primes(n)` Function:**
+   - Takes an integer `n` (number of primes desired) as input.
+   - Initializes an empty list `primes` to store the prime numbers.
+   - Starts a loop, iterating through numbers starting from 2.
+   - For each number `i`, it checks if it's prime using the `is_prime()` function.
+   - If `i` is prime, it's appended to the `primes` list.
+   - The loop continues until the `primes` list has `n` prime numbers.
+   - Finally, it calculates and returns the sum of all the prime numbers in the
+     `primes` list.
+
+3. **Main Part:**
+   - Calls `sum_of_primes(50)` to get the sum of the first 50 prime numbers.
+   - Prints the result.
+
+**Output:**
+
+```
+The sum of the first 50 prime numbers is: 5117
+```
+Enable code execution on the request
+Alternatively, you can enable code execution on the call to generateContent or generateContentStream:
+
+
+import { GoogleGenerativeAI } from '@google/generative-ai';
+
+const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+const model = genAI.getGenerativeModel({
+  model: 'gemini-1.5-pro',
+});
+
+const result = await model.generateContent({
+  contents: [
+    {
+      role: 'user',
+      parts: [
+        {
+          text:
+            'What is the sum of the first 50 prime numbers? ' +
+            'Generate and run code for the calculation, ' +
+            'and make sure you get all 50.',
+        },
+      ],
+    },
+  ],
+  // Setting it on the generateContentStream request.
+  tools: [
+    {
+      codeExecution: {},
+    },
+  ],
+});
+
+const response = result.response;
+console.log(response.text());
+Use code execution in chat
+You can also use code execution as part of a chat.
+
+
+import { GoogleGenerativeAI } from '@google/generative-ai';
+
+const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+const model = genAI.getGenerativeModel({
+  model: 'gemini-1.5-pro',
+});
+
+const chat = model.startChat({
+  // This could also be set on the model.
+  tools: [
+    {
+      codeExecution: {},
+    },
+  ],
+});
+
+const result = await chat.sendMessage(
+  'What is the sum of the first 50 prime numbers? ' +
+    'Generate and run code for the calculation, and make sure you get all 50.',
+);
+const response = result.response;
+console.log(response.text());
+Input/output (I/O)
+Starting with Gemini 2.0 Flash, code execution supports file input and graph output. Using these new input and output capabilities, you can upload CSV and text files, ask questions about the files, and have Matplotlib graphs generated as part of the response.
+
+I/O pricing
+When using code execution I/O, you're charged for input tokens and output tokens:
+
+Input tokens:
+
+User prompt
+Output tokens:
+
+Code generated by the model
+Code execution output in the code environment
+Summary generated by the model
+I/O details
+When you're working with code execution I/O, be aware of the following technical details:
+
+The maximum runtime of the code environment is 30 seconds.
+If the code environment generates an error, the model may decide to regenerate the code output. This can happen up to 5 times.
+The maximum file input size is limited by the model token window. In AI Studio, using Gemini Flash 2.0, the maximum input file size is 1 million tokens (roughly 2MB for text files of the supported input types). If you upload a file that's too large, AI Studio won't let you send it.
+Single turn	Bidirectional (Multimodal Live API)
+Models supported	All Gemini 2.0 models	Only Flash experimental models
+File input types supported	.png, .jpeg, .csv, .xml, .cpp, .java, .py, .js, .ts	.png, .jpeg, .csv, .xml, .cpp, .java, .py, .js, .ts
+Plotting libraries supported	Matplotlib	Matplotlib
+Multi-tool use	No	Yes
+Billing
+There's no additional charge for enabling code execution from the Gemini API. You'll be billed at the current rate of input and output tokens based on the Gemini model you're using.
+
+Here are a few other things to know about billing for code execution:
+
+You're only billed once for the input tokens you pass to the model, and you're billed for the final output tokens returned to you by the model.
+Tokens representing generated code are counted as output tokens. Generated code can include text and multimodal output like images.
+Code execution results are also counted as output tokens.
+The billing model is shown in the following diagram:
+
+code execution billing model
+
+You're billed at the current rate of input and output tokens based on the Gemini model you're using.
+If Gemini uses code execution when generating your response, the original prompt, the generated code, and the result of the executed code are labeled intermediate tokens and are billed as input tokens.
+Gemini then generates a summary and returns the generated code, the result of the executed code, and the final summary. These are billed as output tokens.
+The Gemini API includes an intermediate token count in the API response, so you know why you're getting additional input tokens beyond your initial prompt.
+Limitations
+The model can only generate and execute code. It can't return other artifacts like media files.
+In some cases, enabling code execution can lead to regressions in other areas of model output (for example, writing a story).
+There is some variation in the ability of the different models to use code execution successfully.
+
+Generate structured output with the Gemini API
+
+Python Node.js Go Dart (Flutter) Android Swift Web REST
+
+
+
+Gemini generates unstructured text by default, but some applications require structured text. For these use cases, you can constrain Gemini to respond with JSON, a structured data format suitable for automated processing. You can also constrain the model to respond with one of the options specified in an enum.
+
+Here are a few use cases that might require structured output from the model:
+
+Build a database of companies by pulling company information out of newspaper articles.
+Pull standardized information out of resumes.
+Extract ingredients from recipes and display a link to a grocery website for each ingredient.
+In your prompt, you can ask Gemini to produce JSON-formatted output, but note that the model is not guaranteed to produce JSON and nothing but JSON. For a more deterministic response, you can pass a specific JSON schema in a responseSchema field so that Gemini always responds with an expected structure. To learn more about working with schemas, see More about JSON schemas.
+
+This guide shows you how to generate JSON using the generateContent method through the SDK of your choice or using the REST API directly. The examples show text-only input, although Gemini can also produce JSON responses to multimodal requests that include images, videos, and audio.
+
+Before you begin: Set up your project and API key
+Before calling the Gemini API, you need to set up your project and configure your API key.
+
+ Expand to view how to set up your project and API key
+
+Generate JSON
+When the model is configured to output JSON, it responds to any prompt with JSON-formatted output.
+
+You can control the structure of the JSON response by supplying a schema. There are two ways to supply a schema to the model:
+
+As text in the prompt
+As a structured schema supplied through model configuration
+Supply a schema as text in the prompt
+The following example prompts the model to return cookie recipes in a specific JSON format.
+
+Since the model gets the format specification from text in the prompt, you may have some flexibility in how you represent the specification. Any reasonable format for representing a JSON schema may work.
+
+
+import { GoogleGenAI } from "@google/genai";
+
+const ai = new GoogleGenAI({ apiKey: "GEMINI_API_KEY" });
+
+async function main() {
+    const prompt = `List a few popular cookie recipes using this JSON schema:
+
+    Recipe = {'recipeName': string}
+    Return: Array<Recipe>`;
+
+    const response = await ai.models.generateContent({
+        model: "gemini-2.0-flash",
+        contents: prompt,
+    });
+    console.log(response.text);
+}
+
+main();
+The output might look like this:
+
+
+[{"recipeName": "Chocolate Chip Cookies"}, {"recipeName": "Oatmeal Raisin Cookies"}, {"recipeName": "Snickerdoodles"}, {"recipeName": "Sugar Cookies"}, {"recipeName": "Peanut Butter Cookies"}]
+Supply a schema through model configuration
+The following example does the following:
+
+Instantiates a model configured through a schema to respond with JSON.
+Prompts the model to return cookie recipes.
+This more formal method for declaring the JSON schema gives you more precise control than relying just on text in the prompt.
+
+Important: When you're working with JSON schemas in the Gemini API, the order of properties matters. For more information, see Property ordering.
+
+import { GoogleGenAI, Type } from "@google/genai";
+
+const ai = new GoogleGenAI({ apiKey: "GEMINI_API_KEY" });
+
+async function main() {
+    const response = await ai.models.generateContent({
+        model: 'gemini-2.0-flash',
+        contents: 'List 3 popular cookie recipes.',
+        config: {
+            responseMimeType: 'application/json',
+            responseSchema: {
+                type: Type.ARRAY,
+                items: {
+                    type: Type.OBJECT,
+                    properties: {
+                        'recipeName': {
+                            type: Type.STRING,
+                            description: 'Name of the recipe',
+                            nullable: false,
+                        },
+                    },
+                    required: ['recipeName'],
+                },
+            },
+        },
+    });
+
+    console.debug(response.text);
+}
+
+main();
+The output might look like this:
+
+
+[{"recipeName": "Chocolate Chip Cookies"}, {"recipeName": "Oatmeal Raisin Cookies"}, {"recipeName": "Snickerdoodles"}, {"recipeName": "Sugar Cookies"}, {"recipeName": "Peanut Butter Cookies"}]
+More about JSON schemas
+When you configure the model to return a JSON response, you can use a Schema object to define the shape of the JSON data. The Schema represents a select subset of the OpenAPI 3.0 Schema object.
+
+Here's a pseudo-JSON representation of all the Schema fields:
+
+
+{
+  "type": enum (Type),
+  "format": string,
+  "description": string,
+  "nullable": boolean,
+  "enum": [
+    string
+  ],
+  "maxItems": string,
+  "minItems": string,
+  "properties": {
+    string: {
+      object (Schema)
+    },
+    ...
+  },
+  "required": [
+    string
+  ],
+  "propertyOrdering": [
+    string
+  ],
+  "items": {
+    object (Schema)
+  }
+}
+The Type of the schema must be one of the OpenAPI Data Types. Only a subset of fields is valid for each Type. The following list maps each Type to valid fields for that type:
+
+string -> enum, format
+integer -> format
+number -> format
+boolean
+array -> minItems, maxItems, items
+object -> properties, required, propertyOrdering, nullable
+Here are some example schemas showing valid type-and-field combinations:
+
+
+{ "type": "string", "enum": ["a", "b", "c"] }
+
+{ "type": "string", "format": "date-time" }
+
+{ "type": "integer", "format": "int64" }
+
+{ "type": "number", "format": "double" }
+
+{ "type": "boolean" }
+
+{ "type": "array", "minItems": 3, "maxItems": 3, "items": { "type": ... } }
+
+{ "type": "object",
+  "properties": {
+    "a": { "type": ... },
+    "b": { "type": ... },
+    "c": { "type": ... }
+  },
+  "nullable": true,
+  "required": ["c"],
+  "propertyOrdering": ["c", "b", "a"]
+}
+For complete documentation of the Schema fields as they're used in the Gemini API, see the Schema reference.
+
+Property ordering
+When you're working with JSON schemas in the Gemini API, the order of properties is important. By default, the API orders properties alphabetically and does not preserve the order in which the properties are defined (although the Google Gen AI SDKs may preserve this order). If you're providing examples to the model with a schema configured, and the property ordering of the examples is not consistent with the property ordering of the schema, the output could be rambling or unexpected.
+
+To ensure a consistent, predictable ordering of properties, you can use the optional propertyOrdering[] field.
+
+
+"propertyOrdering": ["recipe_name", "ingredients"]
+propertyOrdering[] – not a standard field in the OpenAPI specification – is an array of strings used to determine the order of properties in the response. By specifying the order of properties and then providing examples with properties in that same order, you can potentially improve the quality of results.
+
+Function Calling with the Gemini API
+
+Function calling lets you connect models to external tools and APIs. Instead of generating text responses, the model understands when to call specific functions and provides the necessary parameters to execute real-world actions. This allows the model to act as a bridge between natural language and real-world actions and data. Function calling has 3 primary use cases:
+
+Augment Knowledge: Access information from external sources like databases, APIs, and knowledge bases.
+Extend Capabilities: Use external tools to perform computations and extend the limitations of the model, such as using a calculator or creating charts.
+Take Actions: Interact with external systems using APIs, such as scheduling appointments, creating invoices, sending emails, or controlling smart home devices
+Get Weather Schedule Meeting Create Chart
+
+Python
+JavaScript
+REST
+
+import { GoogleGenAI, Type } from '@google/genai';
+
+// Configure the client
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
+// Define the function declaration for the model
+const createChartFunctionDeclaration = {
+  name: 'create_bar_chart',
+  description: 'Creates a bar chart given a title, labels, and corresponding values.',
+  parameters: {
+    type: Type.OBJECT,
+    properties: {
+      title: {
+        type: Type.STRING,
+        description: 'The title for the chart.',
+      },
+      labels: {
+        type: Type.ARRAY,
+        items: { type: Type.STRING },
+        description: 'List of labels for the data points (e.g., ["Q1", "Q2", "Q3"]).',
+      },
+      values: {
+        type: Type.ARRAY,
+        items: { type: Type.NUMBER },
+        description: 'List of numerical values corresponding to the labels (e.g., [50000, 75000, 60000]).',
+      },
+    },
+    required: ['title', 'labels', 'values'],
+  },
+};
+
+// Send request with function declarations
+const response = await ai.models.generateContent({
+  model: 'gemini-2.0-flash',
+  contents: "Create a bar chart titled 'Quarterly Sales' with data: Q1: 50000, Q2: 75000, Q3: 60000.",
+  config: {
+    tools: [{
+      functionDeclarations: [createChartFunctionDeclaration]
+    }],
+  },
+});
+
+// Check for function calls in the response
+if (response.functionCalls && response.functionCalls.length > 0) {
+  const functionCall = response.functionCalls[0]; // Assuming one function call
+  console.log(`Function to call: ${functionCall.name}`);
+  console.log(`Arguments: ${JSON.stringify(functionCall.args)}`);
+  // In a real app, you would call your actual function here:
+  // const result = await createBarChart(functionCall.args);
+} else {
+  console.log("No function call found in the response.");
+  console.log(response.text);
+}
+How Function Calling Works
+function calling overview
+
+Function calling involves a structured interaction between your application, the model, and external functions. Here's a breakdown of the process:
+
+Define Function Declaration: Define the function declaration in your application code. Function Declarations describe the function's name, parameters, and purpose to the model.
+Call LLM with function declarations: Send user prompt along with the function declaration(s) to the model. It analyzes the request and determines if a function call would be helpful. If so, it responds with a structured JSON object.
+Execute Function Code (Your Responsibility): The Model does not execute the function itself. It's your application's responsibility to process the response and check for Function Call, if
+Yes: Extract the name and args of the function and execute the corresponding function in your application.
+No: The model has provided a direct text response to the prompt (this flow is less emphasized in the example but is a possible outcome).
+Create User friendly response: If a function was executed, capture the result and send it back to the model in a subsequent turn of the conversation. It will use the result to generate a final, user-friendly response that incorporates the information from the function call.
+This process can be repeated over multiple turns, allowing for complex interactions and workflows. The model also supports calling multiple functions in a single turn (parallel function calling) and in sequence (compositional function calling).
+
+Step 1: Define Function Declaration
+Define a function and its declaration within your application code that allows users to set light values and make an API request. This function could call external services or APIs.
+
+Python
+JavaScript
+
+import { Type } from '@google/genai';
+
+// Define a function that the model can call to control smart lights
+const setLightValuesFunctionDeclaration = {
+  name: 'set_light_values',
+  description: 'Sets the brightness and color temperature of a light.',
+  parameters: {
+    type: Type.OBJECT,
+    properties: {
+      brightness: {
+        type: Type.NUMBER,
+        description: 'Light level from 0 to 100. Zero is off and 100 is full brightness',
+      },
+      color_temp: {
+        type: Type.STRING,
+        enum: ['daylight', 'cool', 'warm'],
+        description: 'Color temperature of the light fixture, which can be `daylight`, `cool` or `warm`.',
+      },
+    },
+    required: ['brightness', 'color_temp'],
+  },
+};
+
+/**
+* Set the brightness and color temperature of a room light. (mock API)
+* @param {number} brightness - Light level from 0 to 100. Zero is off and 100 is full brightness
+* @param {string} color_temp - Color temperature of the light fixture, which can be `daylight`, `cool` or `warm`.
+* @return {Object} A dictionary containing the set brightness and color temperature.
+*/
+function setLightValues(brightness, color_temp) {
+  return {
+    brightness: brightness,
+    colorTemperature: color_temp
+  };
+}
+Step 2: Call the model with function declarations
+Once you have defined your function declarations, you can prompt the model to use the function. It analyzes the prompt and function declarations and decides to respond directly or to call a function. If a function is called the response object will contain a function call suggestion.
+
+Python
+JavaScript
+
+import { GoogleGenAI } from '@google/genai';
+
+// Generation Config with Function Declaration
+const config = {
+  tools: [{
+    functionDeclarations: [setLightValuesFunctionDeclaration]
+  }]
+};
+
+// Configure the client
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
+// Define user prompt
+const contents = [
+  {
+    role: 'user',
+    parts: [{ text: 'Turn the lights down to a romantic level' }]
+  }
+];
+
+// Send request with function declarations
+const response = await ai.models.generateContent({
+  model: 'gemini-2.0-flash',
+  contents: contents,
+  config: config
+});
+
+console.log(response.functionCalls[0]); 
+The model then returns a functionCall object in an OpenAPI compatible schema specifying how to call one or more of the declared functions in order to respond to the user's question.
+
+Python
+JavaScript
+
+{
+  name: 'set_light_values',
+  args: { brightness: 25, color_temp: 'warm' }
+}
+Step 3: Execute set_light_values function code
+Extract the function call details from the model's response, parse the arguments , and execute the set_light_values function in our code.
+
+Python
+JavaScript
+
+// Extract tool call details
+const tool_call = response.functionCalls[0]
+
+let result;
+if (tool_call.name === 'set_light_values') {
+  result = setLightValues(tool_call.args.brightness, tool_call.args.color_temp);
+  console.log(`Function execution result: ${JSON.stringify(result)}`);
+}
+Step 4: Create User friendly response with function result and call the model again
+Finally, send the result of the function execution back to the model so it can incorporate this information into its final response to the user.
+
+Python
+JavaScript
+
+// Create a function response part
+const function_response_part = {
+  name: tool_call.name,
+  response: { result }
+}
+
+// Append function call and result of the function execution to contents
+contents.push({ role: 'model', parts: [{ functionCall: tool_call }] });
+contents.push({ role: 'user', parts: [{ functionResponse: function_response_part }] });
+
+// Get the final response from the model
+const final_response = await ai.models.generateContent({
+  model: 'gemini-2.0-flash',
+  contents: contents,
+  config: config
+});
+
+console.log(final_response.text);
+This completes the function calling flow. The Model successfully used the set_light_values function to perform the request action of the user.
+
+Function declarations
+When you implement function calling in a prompt, you create a tools object, which contains one or more function declarations. You define functions using JSON, specifically with a select subset of the OpenAPI schema format. A single function declaration can include the following parameters:
+
+name (string): A unique name for the function (get_weather_forecast, send_email). Use descriptive names without spaces or special characters (use underscores or camelCase).
+description (string): A clear and detailed explanation of the function's purpose and capabilities. This is crucial for the model to understand when to use the function. Be specific and provide examples if helpful ("Finds theaters based on location and optionally movie title which is currently playing in theaters.").
+parameters (object): Defines the input parameters the function expects.
+type (string): Specifies the overall data type, such as object.
+properties (object): Lists individual parameters, each with:
+type (string): The data type of the parameter, such as string, integer, boolean, array.
+description (string): A description of the parameter's purpose and format. Provide examples and constraints ("The city and state, e.g., 'San Francisco, CA' or a zip code e.g., '95616'.").
+enum (array, optional): If the parameter values are from a fixed set, use "enum" to list the allowed values instead of just describing them in the description. This improves accuracy ("enum": ["daylight", "cool", "warm"]).
+required (array): An array of strings listing the parameter names that are mandatory for the function to operate.
+Parallel Function Calling
+In addition to single turn function calling, you can also call multiple functions at once. Parallel function calling lets you execute multiple functions at once and is used when the functions are not dependent on each other. This is useful in scenarios like gathering data from multiple independent sources, such as retrieving customer details from different databases or checking inventory levels across various warehouses or performing multiple actions such as converting your apartment into a disco.
+
+Python
+JavaScript
+
+import { Type } from '@google/genai';
+
+const powerDiscoBall = {
+  name: 'power_disco_ball',
+  description: 'Powers the spinning disco ball.',
+  parameters: {
+    type: Type.OBJECT,
+    properties: {
+      power: {
+        type: Type.BOOLEAN,
+        description: 'Whether to turn the disco ball on or off.'
+      }
+    },
+    required: ['power']
+  }
+};
+
+const startMusic = {
+  name: 'start_music',
+  description: 'Play some music matching the specified parameters.',
+  parameters: {
+    type: Type.OBJECT,
+    properties: {
+      energetic: {
+        type: Type.BOOLEAN,
+        description: 'Whether the music is energetic or not.'
+      },
+      loud: {
+        type: Type.BOOLEAN,
+        description: 'Whether the music is loud or not.'
+      }
+    },
+    required: ['energetic', 'loud']
+  }
+};
+
+const dimLights = {
+  name: 'dim_lights',
+  description: 'Dim the lights.',
+  parameters: {
+    type: Type.OBJECT,
+    properties: {
+      brightness: {
+        type: Type.NUMBER,
+        description: 'The brightness of the lights, 0.0 is off, 1.0 is full.'
+      }
+    },
+    required: ['brightness']
+  }
+};
+Call the model with an instruction that could use all of the specified tools. This example uses a tool_config. To learn more you can read about configuring function calling.
+
+Python
+JavaScript
+
+import { GoogleGenAI } from '@google/genai';
+
+// Set up function declarations
+const houseFns = [powerDiscoBall, startMusic, dimLights];
+
+const config = {
+    tools: [{
+        functionDeclarations: houseFns
+    }],
+    // Force the model to call 'any' function, instead of chatting.
+    toolConfig: {
+        functionCallingConfig: {
+        mode: 'any'
+        }
+    }
+};
+
+// Configure the client
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
+// Create a chat session
+const chat = ai.chats.create({
+    model: 'gemini-2.0-flash',
+    config: config
+});
+const response = await chat.sendMessage({message: 'Turn this place into a party!'});
+
+// Print out each of the function calls requested from this single call
+console.log("Example 1: Forced function calling");
+for (const fn of response.functionCalls) {
+    const args = Object.entries(fn.args)
+        .map(([key, val]) => `${key}=${val}`)
+        .join(', ');
+    console.log(`${fn.name}(${args})`);
+}
+Each of the printed results reflects a single function call that the model has requested. To send the results back, include the responses in the same order as they were requested.
+
+The Python SDK supports a feature called automatic function calling which converts the Python function to declarations, handles the function call execution and response cycle for you. Following is an example for our disco use case.
+
+Note: Automatic Function Calling is a Python SDK only feature at the moment.
+Python
+
+from google import genai
+from google.genai import types
+
+# Actual implementation functions
+def power_disco_ball_impl(power: bool) -> dict:
+    """Powers the spinning disco ball.
+
+    Args:
+        power: Whether to turn the disco ball on or off.
+
+    Returns:
+        A status dictionary indicating the current state.
+    """
+    return {"status": f"Disco ball powered {'on' if power else 'off'}"}
+
+def start_music_impl(energetic: bool, loud: bool) -> dict:
+    """Play some music matching the specified parameters.
+
+    Args:
+        energetic: Whether the music is energetic or not.
+        loud: Whether the music is loud or not.
+
+    Returns:
+        A dictionary containing the music settings.
+    """
+    music_type = "energetic" if energetic else "chill"
+    volume = "loud" if loud else "quiet"
+    return {"music_type": music_type, "volume": volume}
+
+def dim_lights_impl(brightness: float) -> dict:
+    """Dim the lights.
+
+    Args:
+        brightness: The brightness of the lights, 0.0 is off, 1.0 is full.
+
+    Returns:
+        A dictionary containing the new brightness setting.
+    """
+    return {"brightness": brightness}
+
+config = {
+    "tools": [power_disco_ball_impl, start_music_impl, dim_lights_impl],
+}
+
+chat = client.chats.create(model="gemini-2.0-flash", config=config)
+response = chat.send_message("Do everything you need to this place into party!")
+
+print("\nExample 2: Automatic function calling")
+print(response.text)
+# I've turned on the disco ball, started playing loud and energetic music, and dimmed the lights to 50% brightness. Let's get this party started!
+Compositional Function Calling
+Gemini 2.0 supports compositional function calling, meaning the model can chain multiple function calls together. For example, to answer "Get the temperature in my current location", the Gemini API might invoke both a get_current_location() function and a get_weather() function that takes the location as a parameter.
+
+Note: Compositional function calling is a Live API only feature at the moment. The run() function declaration, which handles the asynchronous websocket setup, is omitted for brevity.
+Python
+JavaScript
+
+// Light control schemas
+const turnOnTheLightsSchema = { name: 'turn_on_the_lights' };
+const turnOffTheLightsSchema = { name: 'turn_off_the_lights' };
+
+const prompt = `
+  Hey, can you write run some python code to turn on the lights, wait 10s and then turn off the lights?
+`;
+
+const tools = [
+  { codeExecution: {} },
+  { functionDeclarations: [turnOnTheLightsSchema, turnOffTheLightsSchema] }
+];
+
+await run(prompt, tools=tools, modality="AUDIO")
+Function calling modes
+The Gemini API lets you control how the model uses the provided tools (function declarations). Specifically, you can set the mode within the function_calling_config.
+
+AUTO (Default): The model decides whether to generate a natural language response or suggest a function call based on the prompt and context. This is the most flexible mode and recommended for most scenarios.
+ANY: The model is constrained to always predict a function call and guarantee function schema adherence. If allowed_function_names is not specified, the model can choose from any of the provided function declarations. If allowed_function_names is provided as a list, the model can only choose from the functions in that list. Use this mode when you require a function call in response to every prompt (if applicable).
+NONE: The model is prohibited from making function calls. This is equivalent to sending a request without any function declarations. Use this to temporarily disable function calling without removing your tool definitions.
+
+Python
+JavaScript
+
+import { FunctionCallingConfigMode } from '@google/genai';
+
+// Configure function calling mode
+const toolConfig = {
+  functionCallingConfig: {
+    mode: FunctionCallingConfigMode.ANY,
+    allowedFunctionNames: ['get_current_temperature']
+  }
+};
+
+// Create the generation config
+const config = {
+  temperature: 0,
+  tools: tools, // not defined here.
+  toolConfig: toolConfig,
+};
+Automatic Function Calling (Python Only)
+When using the Python SDK, you can provide Python functions directly as tools. The SDK automatically converts the Python function to declarations, handles the function call execution and response cycle for you. The Python SDK then automatically:
+
+Detects function call responses from the model.
+Call the corresponding Python function in your code.
+Sends the function response back to the model.
+Returns the model's final text response.
+To use this, define your function with type hints and a docstring, and then pass the function itself (not a JSON declaration) as a tool:
+
+Python
+
+from google import genai
+from google.genai import types
+
+# Define the function with type hints and docstring
+def get_current_temperature(location: str) -> dict:
+    """Gets the current temperature for a given location.
+
+    Args:
+        location: The city and state, e.g. San Francisco, CA
+
+    Returns:
+        A dictionary containing the temperature and unit.
+    """
+    # ... (implementation) ...
+    return {"temperature": 25, "unit": "Celsius"}
+
+# Configure the client and model
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))  # Replace with your actual API key setup
+config = types.GenerateContentConfig(
+    tools=[get_current_temperature]
+)  # Pass the function itself
+
+# Make the request
+response = client.models.generate_content(
+    model="gemini-2.0-flash",
+    contents="What's the temperature in London?",
+    config=config,
+)
+
+print(response.text)  # The SDK handles the function call and returns the final text
+You can disable automatic function calling with:
+
+Python
+
+# To disable automatic function calling:
+config = types.GenerateContentConfig(
+    tools=[get_current_temperature],
+    automatic_function_calling=types.AutomaticFunctionCallingConfig(disable=True)
+)
+Automatic Function schema declaration
+Automatic schema extraction from Python functions doesn't work in all cases. For example: it doesn't handle cases where you describe the fields of a nested dictionary-object. The API is able to describe any of the following types:
+
+Python
+
+AllowedType = (int | float | bool | str | list['AllowedType'] | dict[str, AllowedType])
+To see what the inferred schema looks like, you can convert it using from_callable:
+
+Python
+
+def multiply(a: float, b: float):
+    """Returns a * b."""
+    return a * b
+
+fn_decl = types.FunctionDeclaration.from_callable(callable=multiply, client=client)
+
+# to_json_dict() provides a clean JSON representation.
+print(fn_decl.to_json_dict())
+Multi-tool use: Combine Native Tools with Function Calling
+With Gemini 2.0, you can enable multiple tools combining native tools with function calling at the same time. Here's an example that enables two tools, Grounding with Google Search and code execution, in a request using the Live API.
+
+Note: Multi-tool use is a Live API only feature at the moment. The run() function declaration, which handles the asynchronous websocket setup, is omitted for brevity.
+Python
+JavaScript
+
+// Multiple tasks example - combining lights, code execution, and search
+const prompt = `
+  Hey, I need you to do three things for me.
+
+    1.  Turn on the lights.
+    2.  Then compute the largest prime palindrome under 100000.
+    3.  Then use Google Search to look up information about the largest earthquake in California the week of Dec 5 2024.
+
+  Thanks!
+`;
+
+const tools = [
+  { googleSearch: {} },
+  { codeExecution: {} },
+  { functionDeclarations: [turnOnTheLightsSchema, turnOffTheLightsSchema] } // not defined here.
+];
+
+// Execute the prompt with specified tools in audio modality
+await run(prompt, {tools: tools, modality: "AUDIO"});
+Python developers can try this out in the Live API Tool Use notebook.
+
+Supported Models
+Experimental models are not included. You can find their capabilities on the model overview page.
+
+Model	Function Calling	Parallel Function Calling	Compositional Function Calling
+(Live API only)
+Gemini 2.0 Flash	✔️	✔️	✔️
+Gemini 2.0 Flash-Lite	X	X	X
+Gemini 1.5 Flash	✔️	✔️	✔️
+Gemini 1.5 Pro	✔️	✔️	✔️
+Best Practices
+Function and Parameter Descriptions: Be extremely clear and specific in your descriptions. The model relies on these to choose the correct function and provide appropriate arguments.
+Naming: Use descriptive function names (without spaces, periods, or dashes).
+Strong Typing: Use specific types (integer, string, enum) for parameters to reduce errors. If a parameter has a limited set of valid values, use an enum.
+Prompt Engineering:
+Provide context: Tell the model its role (e.g., "You are a helpful weather assistant.").
+Give instructions: Specify how and when to use functions (e.g., "Don't guess dates; always use a future date for forecasts.").
+Encourage clarification: Instruct the model to ask clarifying questions if needed.
+Temperature: Use a low temperature (e.g., 0) for more deterministic and reliable function calls.
+Validation: If a function call has significant consequences (e.g., placing an order), validate the call with the user before executing it.
+Error Handling: Implement robust error handling in your functions to gracefully handle unexpected inputs or API failures. Return informative error messages that the model can use to generate helpful responses to the user.
+Security: Be mindful of security when calling external APIs. Use appropriate authentication and authorization mechanisms. Avoid exposing sensitive data in function calls.
+Token Limits: Function descriptions and parameters count towards your input token limit. If you're hitting token limits, consider limiting the number of functions or the length of the descriptions, break down complex tasks into smaller, more focused function sets.
+Notes and Limitations
+Only a subset of the OpenAPI schema is supported.
+Supported parameter types in Python are limited.
+Automatic function calling is a Python SDK feature only.
+
+Explore document processing capabilities with the Gemini API
+
+Python Node.js Go REST
+
+The Gemini API supports PDF input, including long documents (up to 3600 pages). Gemini models process PDFs with native vision, and are therefore able to understand both text and image contents inside documents. With native PDF vision support, Gemini models are able to:
+
+Analyze diagrams, charts, and tables inside documents.
+Extract information into structured output formats.
+Answer questions about visual and text contents in documents.
+Summarize documents.
+Transcribe document content (e.g. to HTML) preserving layouts and formatting, for use in downstream applications (such as in RAG pipelines).
+This tutorial demonstrates some possible ways to use the Gemini API with PDF documents. All output is text-only.
+
+Before you begin: Set up your project and API key
+Before calling the Gemini API, you need to set up your project and configure your API key.
+
+ Expand to view how to set up your project and API key
+
+Tip: For complete setup instructions, see the Gemini API quickstart.
+Get and secure your API key
+You need an API key to call the Gemini API. If you don't already have one, create a key in Google AI Studio.
+
+Get an API key
+
+It's strongly recommended that you do not check an API key into your version control system.
+
+You should store your API key in a secrets store such as Google Cloud Secret Manager.
+
+This tutorial assumes that you're accessing your API key as an environment variable.
+
+Install the SDK package and configure your API key
+In your application, do the following:
+
+Install the GoogleGenerativeAI package for Node.js:
+
+
+npm install @google/generative-ai
+Import the package and configure the service with your API key:
+
+
+const { GoogleGenerativeAI } = require("@google/generative-ai");
+
+// Access your API key as an environment variable
+const genAI = new GoogleGenerativeAI(process.env.API_KEY);
+Prompting with PDFs
+This guide demonstrates how to upload and process PDFs using the File API or by including them as inline data.
+
+Technical details
+Gemini 1.5 Pro and 1.5 Flash support a maximum of 3,600 document pages. Document pages must be in one of the following text data MIME types:
+
+PDF - application/pdf
+JavaScript - application/x-javascript, text/javascript
+Python - application/x-python, text/x-python
+TXT - text/plain
+HTML - text/html
+CSS - text/css
+Markdown - text/md
+CSV - text/csv
+XML - text/xml
+RTF - text/rtf
+Each document page is equivalent to 258 tokens.
+
+While there are no specific limits to the number of pixels in a document besides the model's context window, larger pages are scaled down to a maximum resolution of 3072x3072 while preserving their original aspect ratio, while smaller pages are scaled up to 768x768 pixels. There is no cost reduction for pages at lower sizes, other than bandwidth, or performance improvement for pages at higher resolution.
+
+For best results:
+
+Rotate pages to the correct orientation before uploading.
+Avoid blurry pages.
+If using a single page, place the text prompt after the page.
+PDF input
+For PDF payloads under 20MB, you can choose between uploading base64 encoded documents or directly uploading locally stored files.
+
+As inline data
+You can process PDF documents directly from URLs. Here's a code snippet showing how to do this:
+
+
+import { GoogleGenAI } from "@google/genai";
+
+const ai = new GoogleGenAI({ apiKey: "GEMINI_API_KEY" });
+
+async function main() {
+    const pdfResp = await fetch('https://discovery.ucl.ac.uk/id/eprint/10089234/1/343019_3_art_0_py4t4l_convrt.pdf')
+        .then((response) => response.arrayBuffer());
+
+    const contents = [
+        { text: "Summarize this document" },
+        {
+            inlineData: {
+                mimeType: 'application/pdf',
+                data: Buffer.from(pdfResp).toString("base64")
+            }
+        }
+    ];
+
+    const response = await ai.models.generateContent({
+        model: "gemini-1.5-flash",
+        contents: contents
+    });
+    console.log(response.text);
+}
+
+main();
+Locally stored PDFs
+For locally stored PDFs, you can use the following approach:
+
+
+import { GoogleGenAI } from "@google/genai";
+import * as fs from 'fs';
+
+const ai = new GoogleGenAI({ apiKey: "GEMINI_API_KEY" });
+
+async function main() {
+    const contents = [
+        { text: "Summarize this document" },
+        {
+            inlineData: {
+                mimeType: 'application/pdf',
+                data: Buffer.from(fs.readFileSync("content/343019_3_art_0_py4t4l_convrt.pdf")).toString("base64")
+            }
+        }
+    ];
+
+    const response = await ai.models.generateContent({
+        model: "gemini-1.5-flash",
+        contents: contents
+    });
+    console.log(response.text);
+}
+
+main();
+Large PDFs
+You can use the File API to upload a document of any size. Always use the File API when the total request size (including the files, text prompt, system instructions, etc.) is larger than 20 MB.
+
+Note: The File API lets you store up to 20 GB of files per project, with a per-file maximum size of 2 GB. Files are stored for 48 hours. They can be accessed in that period with your API key, but cannot be downloaded from the API. The File API is available at no cost in all regions where the Gemini API is available.
+Call media.upload to upload a file using the File API. The following code uploads a document file and then uses the file in a call to models.generateContent.
+
+Large PDFs from URLs
+Use the File API for large PDF files available from URLs, simplifying the process of uploading and processing these documents directly through their URLs:
+
+
+import { createPartFromUri, GoogleGenAI } from "@google/genai";
+
+const ai = new GoogleGenAI({ apiKey: "GEMINI_API_KEY" });
+
+async function main() {
+
+    const pdfBuffer = await fetch("https://www.nasa.gov/wp-content/uploads/static/history/alsj/a17/A17_FlightPlan.pdf")
+        .then((response) => response.arrayBuffer());
+
+    const fileBlob = new Blob([pdfBuffer], { type: 'application/pdf' });
+
+    const file = await ai.files.upload({
+        file: fileBlob,
+        config: {
+            displayName: 'A17_FlightPlan.pdf',
+        },
+    });
+
+    // Wait for the file to be processed.
+    let getFile = await ai.files.get({ name: file.name });
+    while (getFile.state === 'PROCESSING') {
+        getFile = await ai.files.get({ name: file.name });
+        console.log(`current file status: ${getFile.state}`);
+        console.log('File is still processing, retrying in 5 seconds');
+
+        await new Promise((resolve) => {
+            setTimeout(resolve, 5000);
+        });
+    }
+    if (file.state === 'FAILED') {
+        throw new Error('File processing failed.');
+    }
+
+    // Add the file to the contents.
+    const content = [
+        'Summarize this document',
+    ];
+
+    if (file.uri && file.mimeType) {
+        const fileContent = createPartFromUri(file.uri, file.mimeType);
+        content.push(fileContent);
+    }
+
+    const response = await ai.models.generateContent({
+        model: 'gemini-1.5-flash',
+        contents: content,
+    });
+
+    console.log(response.text);
+
+}
+
+main();
+Large PDFs stored locally
+
+import { createPartFromUri, GoogleGenAI } from "@google/genai";
+
+const ai = new GoogleGenAI({ apiKey: "GEMINI_API_KEY" });
+
+async function main() {
+    const file = await ai.files.upload({
+        file: 'path-to-localfile.pdf'
+        config: {
+            displayName: 'A17_FlightPlan.pdf',
+        },
+    });
+
+    // Wait for the file to be processed.
+    let getFile = await ai.files.get({ name: file.name });
+    while (getFile.state === 'PROCESSING') {
+        getFile = await ai.files.get({ name: file.name });
+        console.log(`current file status: ${getFile.state}`);
+        console.log('File is still processing, retrying in 5 seconds');
+
+        await new Promise((resolve) => {
+            setTimeout(resolve, 5000);
+        });
+    }
+    if (file.state === 'FAILED') {
+        throw new Error('File processing failed.');
+    }
+
+    // Add the file to the contents.
+    const content = [
+        'Summarize this document',
+    ];
+
+    if (file.uri && file.mimeType) {
+        const fileContent = createPartFromUri(file.uri, file.mimeType);
+        content.push(fileContent);
+    }
+
+    const response = await ai.models.generateContent({
+        model: 'gemini-1.5-flash',
+        contents: content,
+    });
+
+    console.log(response.text);
+
+}
+
+main();
+You can verify the API successfully stored the uploaded file and get its metadata by calling files.get. Only the name (and by extension, the uri) are unique.
+
+Multiple PDFs
+The Gemini API is capable of processing multiple PDF documents in a single request, as long as the combined size of the documents and the text prompt stays within the model's context window.
+
+
+import { createPartFromUri, GoogleGenAI } from "@google/genai";
+
+const ai = new GoogleGenAI({ apiKey: "GEMINI_API_KEY" });
+
+async function uploadRemotePDF(url, displayName) {
+    const pdfBuffer = await fetch(url)
+        .then((response) => response.arrayBuffer());
+
+    const fileBlob = new Blob([pdfBuffer], { type: 'application/pdf' });
+
+    const file = await ai.files.upload({
+        file: fileBlob,
+        config: {
+            displayName: displayName,
+        },
+    });
+
+    // Wait for the file to be processed.
+    let getFile = await ai.files.get({ name: file.name });
+    while (getFile.state === 'PROCESSING') {
+        getFile = await ai.files.get({ name: file.name });
+        console.log(`current file status: ${getFile.state}`);
+        console.log('File is still processing, retrying in 5 seconds');
+
+        await new Promise((resolve) => {
+            setTimeout(resolve, 5000);
+        });
+    }
+    if (file.state === 'FAILED') {
+        throw new Error('File processing failed.');
+    }
+
+    return file;
+}
+
+async function main() {
+    const content = [
+        'What is the difference between each of the main benchmarks between these two papers? Output these in a table.',
+    ];
+
+    let file1 = await uploadRemotePDF("https://arxiv.org/pdf/2312.11805", "PDF 1")
+    if (file1.uri && file1.mimeType) {
+        const fileContent = createPartFromUri(file1.uri, file1.mimeType);
+        content.push(fileContent);
+    }
+    let file2 = await uploadRemotePDF("https://arxiv.org/pdf/2403.05530", "PDF 2")
+    if (file2.uri && file2.mimeType) {
+        const fileContent = createPartFromUri(file2.uri, file2.mimeType);
+        content.push(fileContent);
+    }
+
+    const response = await ai.models.generateContent({
+        model: 'gemini-1.5-flash',
+        contents: content,
+    });
+
+    console.log(response.text);
+}
+
+main();
+List files
+You can list all files uploaded using the File API and their URIs using files.list.
+
+
+const listResponse = await ai.files.list({config: {'pageSize': 10}});
+
+for await (const file of listResponse) {
+  console.log(file.name);
+}
+Delete files
+Files uploaded using the File API are automatically deleted after 2 days. You can also manually delete them using files.delete.
+
+
+const deleteResponse = await ai.files.delete({ name: file.name });
+Context caching with PDFs
+
+const contents = ...; // Initialize the content to cache.
+const response = await ai.caches.create({
+  model: 'gemini-1.5-flash',
+  config: {
+   'contents': contents,
+   'displayName': 'test cache',
+   'systemInstruction': 'What is the sum of the two pdfs?',
+   'ttl': '86400s',
+ }
+});
+List caches
+It's not possible to retrieve or view cached content, but you can retrieve cache metadata (name, model, display_name, usage_metadata, create_time, update_time, and expire_time).
+
+To list metadata for all uploaded caches, use caches.list():
+
+
+const cachedContents = await ai.caches.list({config: {'pageSize': 2}});
+for (const cachedContent of cachedContents) {
+  console.log(cachedContent);
+}
+Update a cache
+You can set a new ttl or expire_time for a cache. Changing anything else about the cache isn't supported.
+
+The following example shows how to update the ttl of a cache.
+
+
+const response = await ai.caches.update({
+  name: 'gemini-1.5-flash',
+  config: {'ttl': '7600s'}
+});
+Delete a cache
+The caching service provides a delete operation for manually removing content from the cache.
+
+
+await ai.caches.delete({name: 'gemini-1.5-flash'});
+What's next
+This guide shows how to use generateContent and to generate text outputs from processed documents. To learn more, see the following resources:
+
+File prompting strategies: The Gemini API supports prompting with text, image, audio, and video data, also known as multimodal prompting.
+System instructions: System instructions let you steer the behavior of the model based on your specific needs and use cases.
+Safety guidance: Sometimes generative AI models produce unexpected outputs, such as outputs that are inaccurate, biased, or offensive. Post-processing and human evaluation are essential to limit the risk of harm from such outputs.
+
+
+Grounding with Google Search
+
+Python Javascript REST
+
+The Grounding with Google Search feature in the Gemini API and AI Studio can be used to improve the accuracy and recency of responses from the model. In addition to more factual responses, when Grounding with Google Search is enabled, the Gemini API returns grounding sources (in-line supporting links) and Google Search Suggestions along with the response content. The Search Suggestions point users to the search results corresponding to the grounded response.
+
+This guide will help you get started with Grounding with Google Search using one of the Gemini API SDKs or the REST API.
+
+Configure Search Grounding
+Starting with Gemini 2.0, Google Search is available as a tool. This means that the model can decide when to use Google Search. The following example shows how to configure Search as a tool.
+
+
+import {Client} from '@google/genai';
+
+const ai = new GoogleGenAI({ apiKey: "GEMINI_API_KEY" });
+
+async function main() {
+  const response = await ai.models.generateContent({
+    model: "gemini-2.0-flash",
+    contents: [
+        "Who individually won the most bronze medals during the Paris olympics in 2024?",
+    ]
+    config: {
+      tools: [{googleSearch: {}}],
+    },
+  });
+  console.log(response.text);
+  // To get grounding metadata as web content.
+  console.log(response.candidates[0].groundingMetadata.searchEntryPoint.renderedContent)
+}
+
+await main();
+The Search-as-a-tool functionality also enables multi-turn searches and multi-tool queries (for example, combining Grounding with Google Search and code execution).
+
+Search as a tool enables complex prompts and workflows that require planning, reasoning, and thinking:
+
+Grounding to enhance factuality and recency and provide more accurate answers
+Retrieving artifacts from the web to do further analysis on
+Finding relevant images, videos, or other media to assist in multimodal reasoning or generation tasks
+Coding, technical troubleshooting, and other specialized tasks
+Finding region-specific information or assisting in translating content accurately
+Finding relevant websites for further browsing
+Grounding with Google Search works with all available languages when doing text prompts. On the paid tier of the Gemini Developer API, you can get 1,500 Grounding with Google Search queries per day for free, with additional queries billed at the standard $35 per 1,000 queries.
+
+Google Search Suggestions
+To use Grounding with Google Search, you have to display Google Search Suggestions, which are suggested queries included in the metadata of the grounded response. To learn more about the display requirements, see Use Google Search Suggestions.
+
+Google Search retrieval
+Note: Google Search retrieval is only compatible with Gemini 1.5 models. For Gemini 2.0 models, you should use Search as a tool.
+The following example shows how to configure a model to use Google Search retrieval (note that it only works with 1.5 models):
+
+
+import {Client} from '@google/genai';
+
+const ai = new GoogleGenAI({ apiKey: "GEMINI_API_KEY" });
+
+async function main() {
+  let response = await ai.models.generateContent({
+    model: "gemini-1.5-flash",
+    contents: [
+        "Who individually won the most silver medals during the Paris olympics in 2024?",
+    ],
+    config: {
+      tools: [{googleSearchRetrieval:{}}],
+    },
+  })
+
+  console.log(response.text)
+}
+The mode and dynamicThreshold settings let you control the behavior of dynamic retrieval, giving you additional control over when to use Grounding with Google Search.
+
+
+import {Client, DynamicRetrievalConfigMode} from '@google/genai';
+
+const ai = new GoogleGenAI({ apiKey: "GEMINI_API_KEY" });
+
+async function main() {
+  let response = await ai.models.generateContent({
+    model: "gemini-1.5-flash",
+    contents: [
+        "Who individually won the most gold medals during the Paris olympics in 2024?",
+    ],
+    config: {
+      tools: [{
+        googleSearchRetrieval:{
+          dynamicRetrievalConfig:{
+            dynamicThreshold:0.5,
+            mode:DynamicRetrievalConfigMode.MODE_DYNAMIC
+          }
+        }
+      }],
+    },
+  })
+
+  console.log(response.text)
+}
+Dynamic retrieval
+Note: Dynamic retrieval is only compatible with Gemini 1.5 Flash. For Gemini 2.0, you should use Search as a tool, as shown above.
+Some queries are likely to benefit more from Grounding with Google Search than others. The dynamic retrieval feature gives you additional control over when to use Grounding with Google Search.
+
+If the dynamic retrieval mode is unspecified, Grounding with Google Search is always triggered. If the mode is set to dynamic, the model decides when to use grounding based on a threshold that you can configure. The threshold is a floating-point value in the range [0,1] and defaults to 0.3. If the threshold value is 0, the response is always grounded with Google Search; if it's 1, it never is.
+
+How dynamic retrieval works
+You can use dynamic retrieval in your request to choose when to turn on Grounding with Google Search. This is useful when the prompt doesn't require an answer grounded in Google Search and the model can provide an answer based on its own knowledge without grounding. This helps you manage latency, quality, and cost more effectively.
+
+Before you invoke the dynamic retrieval configuration in your request, understand the following terminology:
+
+Prediction score: When you request a grounded answer, Gemini assigns a prediction score to the prompt. The prediction score is a floating point value in the range [0,1]. Its value depends on whether the prompt can benefit from grounding the answer with the most up-to-date information from Google Search. Thus, if a prompt requires an answer grounded in the most recent facts on the web, it has a higher prediction score. A prompt for which a model-generated answer is sufficient has a lower prediction score.
+
+Here are examples of some prompts and their prediction scores.
+
+Note: The prediction scores are assigned by Gemini and can vary over time depending on several factors.
+Prompt	Prediction score	Comment
+"Write a poem about peonies"	0.13	The model can rely on its knowledge and the answer doesn't need grounding.
+"Suggest a toy for a 2yo child"	0.36	The model can rely on its knowledge and the answer doesn't need grounding.
+"Can you give a recipe for an asian-inspired guacamole?"	0.55	Google Search can give a grounded answer, but grounding isn't strictly required; the model knowledge might be sufficient.
+"What's Agent Builder? How is grounding billed in Agent Builder?"	0.72	Requires Google Search to generate a well-grounded answer.
+"Who won the latest F1 grand prix?"	0.97	Requires Google Search to generate a well-grounded answer.
+Threshold: In your API request, you can specify a dynamic retrieval configuration with a threshold. The threshold is a floating point value in the range [0,1] and defaults to 0.3. If the threshold value is zero, the response is always grounded with Google Search. For all other values of threshold, the following is applicable:
+
+If the prediction score is greater than or equal to the threshold, the answer is grounded with Google Search. A lower threshold implies that more prompts have responses that are generated using Grounding with Google Search.
+If the prediction score is less than the threshold, the model might still generate the answer, but it isn't grounded with Google Search.
+To learn how to set the dynamic retrieval threshold using an SDK or the REST API, see the appropriate code example.
+
+To find a good threshold that suits your business needs, you can create a representative set of queries that you expect to encounter. Then you can sort the queries according to the prediction score in the response and select a good threshold for your use case.
+
+A grounded response
+If your prompt successfully grounds to Google Search, the response will include groundingMetadata. A grounded response might look something like this (parts of the response have been omitted for brevity):
+
+
+{
+  "candidates": [
+    {
+      "content": {
+        "parts": [
+          {
+            "text": "Carlos Alcaraz won the Gentlemen's Singles title at the 2024 Wimbledon Championships. He defeated Novak Djokovic in the final, winning his second consecutive Wimbledon title and fourth Grand Slam title overall. \n"
+          }
+        ],
+        "role": "model"
+      },
+      ...
+      "groundingMetadata": {
+        "searchEntryPoint": {
+          "renderedContent": "\u003cstyle\u003e\n.container {\n  align-items: center;\n  border-radius: 8px;\n  display: flex;\n  font-family: Google Sans, Roboto, sans-serif;\n  font-size: 14px;\n  line-height: 20px;\n  padding: 8px 12px;\n}\n.chip {\n  display: inline-block;\n  border: solid 1px;\n  border-radius: 16px;\n  min-width: 14px;\n  padding: 5px 16px;\n  text-align: center;\n  user-select: none;\n  margin: 0 8px;\n  -webkit-tap-highlight-color: transparent;\n}\n.carousel {\n  overflow: auto;\n  scrollbar-width: none;\n  white-space: nowrap;\n  margin-right: -12px;\n}\n.headline {\n  display: flex;\n  margin-right: 4px;\n}\n.gradient-container {\n  position: relative;\n}\n.gradient {\n  position: absolute;\n  transform: translate(3px, -9px);\n  height: 36px;\n  width: 9px;\n}\n@media (prefers-color-scheme: light) {\n  .container {\n    background-color: #fafafa;\n    box-shadow: 0 0 0 1px #0000000f;\n  }\n  .headline-label {\n    color: #1f1f1f;\n  }\n  .chip {\n    background-color: #ffffff;\n    border-color: #d2d2d2;\n    color: #5e5e5e;\n    text-decoration: none;\n  }\n  .chip:hover {\n    background-color: #f2f2f2;\n  }\n  .chip:focus {\n    background-color: #f2f2f2;\n  }\n  .chip:active {\n    background-color: #d8d8d8;\n    border-color: #b6b6b6;\n  }\n  .logo-dark {\n    display: none;\n  }\n  .gradient {\n    background: linear-gradient(90deg, #fafafa 15%, #fafafa00 100%);\n  }\n}\n@media (prefers-color-scheme: dark) {\n  .container {\n    background-color: #1f1f1f;\n    box-shadow: 0 0 0 1px #ffffff26;\n  }\n  .headline-label {\n    color: #fff;\n  }\n  .chip {\n    background-color: #2c2c2c;\n    border-color: #3c4043;\n    color: #fff;\n    text-decoration: none;\n  }\n  .chip:hover {\n    background-color: #353536;\n  }\n  .chip:focus {\n    background-color: #353536;\n  }\n  .chip:active {\n    background-color: #464849;\n    border-color: #53575b;\n  }\n  .logo-light {\n    display: none;\n  }\n  .gradient {\n    background: linear-gradient(90deg, #1f1f1f 15%, #1f1f1f00 100%);\n  }\n}\n\u003c/style\u003e\n\u003cdiv class=\"container\"\u003e\n  \u003cdiv class=\"headline\"\u003e\n    \u003csvg class=\"logo-light\" width=\"18\" height=\"18\" viewBox=\"9 9 35 35\" fill=\"none\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n      \u003cpath fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M42.8622 27.0064C42.8622 25.7839 42.7525 24.6084 42.5487 23.4799H26.3109V30.1568H35.5897C35.1821 32.3041 33.9596 34.1222 32.1258 35.3448V39.6864H37.7213C40.9814 36.677 42.8622 32.2571 42.8622 27.0064V27.0064Z\" fill=\"#4285F4\"/\u003e\n      \u003cpath fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M26.3109 43.8555C30.9659 43.8555 34.8687 42.3195 37.7213 39.6863L32.1258 35.3447C30.5898 36.3792 28.6306 37.0061 26.3109 37.0061C21.8282 37.0061 18.0195 33.9811 16.6559 29.906H10.9194V34.3573C13.7563 39.9841 19.5712 43.8555 26.3109 43.8555V43.8555Z\" fill=\"#34A853\"/\u003e\n      \u003cpath fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M16.6559 29.8904C16.3111 28.8559 16.1074 27.7588 16.1074 26.6146C16.1074 25.4704 16.3111 24.3733 16.6559 23.3388V18.8875H10.9194C9.74388 21.2072 9.06992 23.8247 9.06992 26.6146C9.06992 29.4045 9.74388 32.022 10.9194 34.3417L15.3864 30.8621L16.6559 29.8904V29.8904Z\" fill=\"#FBBC05\"/\u003e\n      \u003cpath fill-rule=\"evenodd\" clip-rule=\"evenodd\" d=\"M26.3109 16.2386C28.85 16.2386 31.107 17.1164 32.9095 18.8091L37.8466 13.8719C34.853 11.082 30.9659 9.3736 26.3109 9.3736C19.5712 9.3736 13.7563 13.245 10.9194 18.8875L16.6559 23.3388C18.0195 19.2636 21.8282 16.2386 26.3109 16.2386V16.2386Z\" fill=\"#EA4335\"/\u003e\n    \u003c/svg\u003e\n    \u003csvg class=\"logo-dark\" width=\"18\" height=\"18\" viewBox=\"0 0 48 48\" xmlns=\"http://www.w3.org/2000/svg\"\u003e\n      \u003ccircle cx=\"24\" cy=\"23\" fill=\"#FFF\" r=\"22\"/\u003e\n      \u003cpath d=\"M33.76 34.26c2.75-2.56 4.49-6.37 4.49-11.26 0-.89-.08-1.84-.29-3H24.01v5.99h8.03c-.4 2.02-1.5 3.56-3.07 4.56v.75l3.91 2.97h.88z\" fill=\"#4285F4\"/\u003e\n      \u003cpath d=\"M15.58 25.77A8.845 8.845 0 0 0 24 31.86c1.92 0 3.62-.46 4.97-1.31l4.79 3.71C31.14 36.7 27.65 38 24 38c-5.93 0-11.01-3.4-13.45-8.36l.17-1.01 4.06-2.85h.8z\" fill=\"#34A853\"/\u003e\n      \u003cpath d=\"M15.59 20.21a8.864 8.864 0 0 0 0 5.58l-5.03 3.86c-.98-2-1.53-4.25-1.53-6.64 0-2.39.55-4.64 1.53-6.64l1-.22 3.81 2.98.22 1.08z\" fill=\"#FBBC05\"/\u003e\n      \u003cpath d=\"M24 14.14c2.11 0 4.02.75 5.52 1.98l4.36-4.36C31.22 9.43 27.81 8 24 8c-5.93 0-11.01 3.4-13.45 8.36l5.03 3.85A8.86 8.86 0 0 1 24 14.14z\" fill=\"#EA4335\"/\u003e\n    \u003c/svg\u003e\n    \u003cdiv class=\"gradient-container\"\u003e\u003cdiv class=\"gradient\"\u003e\u003c/div\u003e\u003c/div\u003e\n  \u003c/div\u003e\n  \u003cdiv class=\"carousel\"\u003e\n    \u003ca class=\"chip\" href=\"https://vertexaisearch.cloud.google.com/grounding-api-redirect/AWhgh4x8Epe-gzpwRBvp7o3RZh2m1ygq1EHktn0OWCtvTXjad4bb1zSuqfJd6OEuZZ9_SXZ_P2SvCpJM7NaFfQfiZs6064MeqXego0vSbV9LlAZoxTdbxWK1hFeqTG6kA13YJf7Fbu1SqBYM0cFM4zo0G_sD9NKYWcOCQMvDLDEJFhjrC9DM_QobBIAMq-gWN95G5tvt6_z6EuPN8QY=\"\u003ewho won wimbledon 2024\u003c/a\u003e\n  \u003c/div\u003e\n\u003c/div\u003e\n"
+        },
+        "groundingChunks": [
+          {
+            "web": {
+              "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AWhgh4whET1ta3sDETZvcicd8FeNe4z0VuduVsxrT677KQRp2rYghXI0VpfYbIMVI3THcTuMwggRCbFXS_wVvW0UmGzMe9h2fyrkvsnQPJyikJasNIbjJLPX0StM4Bd694-ZVle56MmRA4YiUvwSqad1w6O2opmWnw==",
+              "title": "wikipedia.org"
+            }
+          },
+          {
+            "web": {
+              "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AWhgh4wR1M-9-yMPUr_KdHlnoAmQ8ZX90DtQ_vDYTjtP2oR5RH4tRP04uqKPLmesvo64BBkPeYLC2EpVDxv9ngO3S1fs2xh-e78fY4m0GAtgNlahUkm_tBm_sih5kFPc7ill9u2uwesNGUkwrQlmP2mfWNU5lMMr23HGktr6t0sV0QYlzQq7odVoBxYWlQ_sqWFH",
+              "title": "wikipedia.org"
+            }
+          },
+          {
+            "web": {
+              "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AWhgh4wsDmROzbP-tmt8GdwCW_pqISTZ4IRbBuoaMyaHfcQg8WW-yKRQQvMDTPAuLxJh-8_U8_iw_6JKFbQ8M9oVYtaFdWFK4gOtL4RrC9Jyqc5BNpuxp6uLEKgL5-9TggtNvO97PyCfziDFXPsxylwI1HcfQdrz3Jy7ZdOL4XM-S5rC0lF2S3VWW0IEAEtS7WX861meBYVjIuuF_mIr3spYPqWLhbAY2Spj-4_ba8DjRvmevIFUhRuESTKvBfmpxNSM",
+              "title": "cbssports.com"
+            }
+          },
+          {
+            "web": {
+              "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AWhgh4yzjLkorHiUKjhOPkWaZ9b4cO-cLG-02vlEl6xTBjMUjyhK04qSIclAa7heR41JQ6AAVXmNdS3WDrLOV4Wli-iezyzW8QPQ4vgnmO_egdsuxhcGk3-Fp8-yfqNLvgXFwY5mPo6QRhvplOFv0_x9mAcka18QuAXtj0SPvJfZhUEgYLCtCrucDS5XFc5HmRBcG1tqFdKSE1ihnp8KLdaWMhrUQI21hHS9",
+              "title": "jagranjosh.com"
+            }
+          },
+          {
+            "web": {
+              "uri": "https://vertexaisearch.cloud.google.com/grounding-api-redirect/AWhgh4y9L4oeNGWCatFz63b9PpP3ys-Wi_zwnkUT5ji9lY7gPUJQcsmmE87q88GSdZqzcx5nZG9usot5FYk2yK-FAGvCRE6JsUQJB_W11_kJU2HVV1BTPiZ4SAgm8XDFIxpCZXnXmEx5HUfRqQm_zav7CvS2qjA2x3__qLME6Jy7R5oza1C5_aqjQu422le9CaigThS5bvJoMo-ZGcXdBUCj2CqoXNVjMA==",
+              "title": "apnews.com"
+            }
+          }
+        ],
+        "groundingSupports": [
+          {
+            "segment": {
+              "endIndex": 85,
+              "text": "Carlos Alcaraz won the Gentlemen's Singles title at the 2024 Wimbledon Championships."
+            },
+            "groundingChunkIndices": [
+              0,
+              1,
+              2,
+              3
+            ],
+            "confidenceScores": [
+              0.97380733,
+              0.97380733,
+              0.97380733,
+              0.97380733
+            ]
+          },
+          {
+            "segment": {
+              "startIndex": 86,
+              "endIndex": 210,
+              "text": "He defeated Novak Djokovic in the final, winning his second consecutive Wimbledon title and fourth Grand Slam title overall."
+            },
+            "groundingChunkIndices": [
+              1,
+              0,
+              4
+            ],
+            "confidenceScores": [
+              0.96145374,
+              0.96145374,
+              0.96145374
+            ]
+          }
+        ],
+        "webSearchQueries": [
+          "who won wimbledon 2024"
+        ]
+      }
+    }
+  ],
+  ...
+}
+If the response doesn't include groundingMetadata, this means the response wasn't successfully grounded. There are several reasons this could happen, including low source relevance or incomplete information within the model response.
+
+When a grounded result is generated, the metadata contains URIs that redirect to the publishers of the content that was used to generate the grounded result. These URIs contain the vertexaisearch subdomain, as in this truncated example: https://vertexaisearch.cloud.google.com/grounding-api-redirect/.... The metadata also contains the publishers' domains. The provided URIs remain accessible for 30 days after the grounded result is generated.
+
+Important: The provided URIs must be directly accessible by the end users and must not be queried programmatically through automated means. If automated access is detected, the grounded answer generation service might stop providing the redirection URIs.
+The renderedContent field within searchEntryPoint is the provided code for implementing Google Search Suggestions. See Use Google Search Suggestions to learn more.
+
+Use Google Search Suggestions
+
+To use Grounding with Google Search, you must enable Google Search Suggestions, which help users find search results corresponding to a grounded response.
+
+Specifically, you need to display the search queries that are included in the grounded response's metadata. The response includes:
+
+content: LLM generated response
+webSearchQueries: The queries to be used for Google Search Suggestions
+For example, in the following code snippet, Gemini responds to a search-grounded prompt which is asking about a type of tropical plant.
+
+
+"predictions": [
+  {
+    "content": "Monstera is a type of vine that thrives in bright indirect light…",
+    "groundingMetadata": {
+      "webSearchQueries": ["What's a monstera?"],
+    }
+  }
+]
+You can take this output and display it by using Google Search Suggestions.
+
+Requirements for Google Search Suggestions
+Do:
+
+Display the Search Suggestion exactly as provided without any modifications while complying with the Display Requirements.
+Take users directly to the Google Search results page (SRP) when they interact with the Search Suggestion.
+Don't:
+
+Include any interstitial screens or additional steps between the user's tap and the display of the SRP.
+Display any other search results or suggestions alongside the Search Suggestion or associated grounded LLM response.
+Display requirements
+Display the Search Suggestion exactly as provided and don't make any modifications to colors, fonts, or appearance. Ensure the Search Suggestion renders as specified in the following mocks, including for light and dark mode: mock Search Suggestion display
+
+Whenever a grounded response is shown, its corresponding Google Search Suggestion should remain visible.
+
+Branding: You must strictly follow Google's Guidelines for Third Party Use of Google Brand Features.
+
+Google Search Suggestions should be at minimum the full width of the grounded response.
+
+Behavior on tap
+When a user taps the chip, they are taken directly to a Google Search results page (SRP) for the search term displayed in the chip. The SRP can open either within your in-app browser or in a separate browser app. It's important to not minimize, remove, or obstruct the SRP's display in any way. The following animated mockup illustrates the tap-to-SRP interaction.
+
+user navigating to search results page
+
+Code to implement a Google Search Suggestion
+When you use the API to ground a response to search, the model response provides compliant HTML and CSS styling in the renderedContent field which you implement to display Search Suggestions in your application. To see an example of the API response, see the response section in Grounding with Google Search.
+
+Note: The provided HTML and CSS provided in the API response automatically adapts to the user's device settings, displaying in either light or dark mode based on the user's preference indicated by @media(prefers-color-scheme).
+What's next
+Learn how to build an interactive chat.
+Learn how to use Gemini safely and responsibly.
+
+Embeddings
+
+Note: Introducing our first Gemini embedding model, available now to developers as gemini-embedding-exp-03-07 in the API.
+The Gemini API supports several embedding models that generate embeddings for words, phrases, code, and sentences. The resulting embeddings can then be used for tasks such as semantic search, text classification, and clustering, among many others.
+
+What are embeddings?
+Embeddings are numerical representations of text (or other media formats) that capture relationships between inputs. Text embeddings work by converting text into arrays of floating point numbers, called vectors. These vectors are designed to capture the meaning of the text. The length of the embedding array is called the vector's dimensionality. A passage of text might be represented by a vector containing hundreds of dimensions.
+
+Embeddings capture semantic meaning and context, which results in text with similar meanings having "closer" embeddings. For example, the sentence "I took my dog to the vet" and "I took my cat to the vet" would have embeddings that are close to each other in the vector space.
+
+You can use embeddings to compare different texts and understand how they relate. For example, if the embeddings of the text "cat" and "dog" are close together you can infer that these words are similar in meaning, context, or both. This enables a variety of common AI use cases.
+
+Generate embeddings
+Use the embedContent method to generate text embeddings:
+
+Python
+JavaScript
+Go
+REST
+
+import { GoogleGenAI } from "@google/genai";
+
+async function main() {
+
+    const ai = new GoogleGenAI({ apiKey: "GEMINI_API_KEY" });
+
+    const response = await ai.models.embedContent({
+        model: 'gemini-embedding-exp-03-07',
+        contents: 'What is the meaning of life?',
+    });
+
+    console.log(response.embeddings);
+}
+
+main();
+You can also generate embeddings for multiple chunks at once by passing them in as a list of strings.
+
+Task types
+When building Retrieval Augmented Generation (RAG) systems, a common design is to use text embeddings to perform a similarity search. In some cases this can lead to degraded quality, because questions and their answers are not semantically similar. For example, a question like "Why is the sky blue?" and its answer "The scattering of sunlight causes the blue color," have distinctly different meanings as statements, which means that a RAG system won't automatically recognize their relation.
+
+Task types enable you to generate optimized embeddings for specific tasks, saving you time and cost and improving performance.
+
+Python
+JavaScript
+REST
+
+import { GoogleGenAI } from "@google/genai";
+
+async function main() {
+
+    const ai = new GoogleGenAI({ apiKey: "GEMINI_API_KEY" });
+
+    const response = await ai.models.embedContent({
+        model: 'gemini-embedding-exp-03-07',
+        contents: 'What is the meaning of life?',
+        config: {
+            taskType: "SEMANTIC_SIMILARITY",
+        }
+    });
+
+    console.log(response.embeddings);
+}
+
+main();
+Supported task types
+Task type	Description
+SEMANTIC_SIMILARITY	Used to generate embeddings that are optimized to assess text similarity.
+CLASSIFICATION	Used to generate embeddings that are optimized to classify texts according to preset labels.
+CLUSTERING	Used to generate embeddings that are optimized to cluster texts based on their similarities.
+RETRIEVAL_DOCUMENT, RETRIEVAL_QUERY, QUESTION_ANSWERING, and FACT_VERIFICATION	Used to generate embeddings that are optimized for document search or information retrieval.
+CODE_RETRIEVAL_QUERY	Used to retrieve a code block based on a natural language query, such as sort an array or reverse a linked list. Embeddings of the code blocks are computed using RETRIEVAL_DOCUMENT.
+Use cases
+Text embeddings are used in a variety of common AI use cases, such as:
+
+Information retrieval: You can use embeddings to retrieve semantically similar text given a piece of input text.
+
+Document search tutorialtask
+
+Clustering: Comparing groups of embeddings can help identify hidden trends.
+
+Embedding clustering tutorialbubble_chart
+
+Vector database: As you take different embedding use cases to production, it is common to store embeddings in a vector database.
+
+Vector database tutorialbolt
+
+Classification: You can train a model using embeddings to classify documents into categories.
+
+Classification tutorialtoken
+
+Embedding models
+The Gemini API offers three models that generate text embeddings:
+
+gemini-embedding-exp-03-07
+text-embedding
+
+Context caching
+
+Python Node.js Go REST
+
+In a typical AI workflow, you might pass the same input tokens over and over to a model. Using the Gemini API context caching feature, you can pass some content to the model once, cache the input tokens, and then refer to the cached tokens for subsequent requests. At certain volumes, using cached tokens is lower cost than passing in the same corpus of tokens repeatedly.
+
+When you cache a set of tokens, you can choose how long you want the cache to exist before the tokens are automatically deleted. This caching duration is called the time to live (TTL). If not set, the TTL defaults to 1 hour. The cost for caching depends on the input token size and how long you want the tokens to persist.
+
+Context caching supports both Gemini 1.5 Pro and Gemini 1.5 Flash.
+
+Note: Context caching is only available for stable models with fixed versions (for example, gemini-1.5-pro-001). You must include the version postfix (for example, the -001 in gemini-1.5-pro-001).
+When to use context caching
+Context caching is particularly well suited to scenarios where a substantial initial context is referenced repeatedly by shorter requests. Consider using context caching for use cases such as:
+
+Chatbots with extensive system instructions
+Repetitive analysis of lengthy video files
+Recurring queries against large document sets
+Frequent code repository analysis or bug fixing
+How caching reduces costs
+Context caching is a paid feature designed to reduce overall operational costs. Billing is based on the following factors:
+
+Cache token count: The number of input tokens cached, billed at a reduced rate when included in subsequent prompts.
+Storage duration: The amount of time cached tokens are stored (TTL), billed based on the TTL duration of cached token count. There are no minimum or maximum bounds on the TTL.
+Other factors: Other charges apply, such as for non-cached input tokens and output tokens.
+For up-to-date pricing details, refer to the Gemini API pricing page. To learn how to count tokens, see the Token guide.
+
+How to use context caching
+This section assumes that you've installed a Gemini SDK (or have curl installed) and that you've configured an API key, as shown in the quickstart.
+
+Generate content using a cache
+The following example shows how to generate content using a cached system instruction and a text file.
+
+
+import {
+  GoogleGenAI,
+  createUserContent,
+  createPartFromUri,
+} from "@google/genai";
+
+const ai = new GoogleGenAI({ apiKey: "GEMINI_API_KEY" });
+
+async function main() {
+  const doc = await ai.files.upload({
+    file: "path/to/file.txt",
+    config: { mimeType: "text/plain" },
+  });
+  console.log("Uploaded file name:", doc.name);
+
+  const modelName = "gemini-1.5-flash-002";
+  const cache = await ai.caches.create({
+    model: modelName,
+    config: {
+      contents: createUserContent(createPartFromUri(doc.uri, doc.mimeType)),
+      systemInstruction: "You are an expert analyzing transcripts.",
+    },
+  });
+  console.log("Cache created:", cache);
+
+  const response = await ai.models.generateContent({
+    model: modelName,
+    contents: "Please summarize this transcript",
+    config: { cachedContent: cache.name },
+  });
+  console.log("Response text:", response.text);
+}
+
+await main();
+List caches
+It's not possible to retrieve or view cached content, but you can retrieve cache metadata (name, model, displayName, usageMetadata, createTime, updateTime, and expireTime).
+
+To list metadata for all uploaded caches, use GoogleGenAI.caches.list():
+
+
+console.log("My caches:");
+const pager = await ai.caches.list({ config: { pageSize: 10 } });
+let page = pager.page;
+while (true) {
+  for (const c of page) {
+    console.log("    ", c.name);
+  }
+  if (!pager.hasNextPage()) break;
+  page = await pager.nextPage();
+}
+Update a cache
+You can set a new ttl or expireTime for a cache. Changing anything else about the cache isn't supported.
+
+The following example shows how to update the ttl of a cache using GoogleGenAI.caches.update().
+
+
+const ttl = `${2 * 3600}s`; // 2 hours in seconds
+const updatedCache = await ai.caches.update({
+  name: cache.name,
+  config: { ttl },
+});
+console.log("After update (TTL):", updatedCache);
+Delete a cache
+The caching service provides a delete operation for manually removing content from the cache. The following example shows how to delete a cache using GoogleGenAI.caches.delete().
+
+
+await ai.caches.delete({ name: cache.name });
+Additional considerations
+Keep the following considerations in mind when using context caching:
+
+The minimum input token count for context caching is 32,768, and the maximum is the same as the maximum for the given model. (For more on counting tokens, see the Token guide).
+The model doesn't make any distinction between cached tokens and regular input tokens. Cached content is simply a prefix to the prompt.
+There are no special rate or usage limits on context caching; the standard rate limits for GenerateContent apply, and token limits include cached tokens.
+The number of cached tokens is returned in the usage_metadata from the create, get, and list operations of the cache service, and also in GenerateContent when using the cache.
+
+Understand and count tokens
+
+Python Node.js Go
+
+
+
+Gemini and other generative AI models process input and output at a granularity called a token.
+
+About tokens
+Tokens can be single characters like z or whole words like cat. Long words are broken up into several tokens. The set of all tokens used by the model is called the vocabulary, and the process of splitting text into tokens is called tokenization.
+
+For Gemini models, a token is equivalent to about 4 characters. 100 tokens is equal to about 60-80 English words.
+
+When billing is enabled, the cost of a call to the Gemini API is determined in part by the number of input and output tokens, so knowing how to count tokens can be helpful.
+
+Count tokens
+All input to and output from the Gemini API is tokenized, including text, image files, and other non-text modalities.
+
+You can count tokens in the following ways:
+
+Call countTokens with the input of the request.
+This returns the total number of tokens in the input only. You can make this call before sending the input to the model to check the size of your requests.
+
+Use the usageMetadata attribute on the response object after calling generate_content.
+This returns the total number of tokens in both the input and the output: totalTokenCount.
+It also returns the token counts of the input and output separately: promptTokenCount (input tokens) and candidatesTokenCount (output tokens).
+
+Count text tokens
+If you call countTokens with a text-only input, it returns the token count of the text in the input only (totalTokens). You can make this call before calling generateContent to check the size of your requests.
+
+Another option is calling generateContent and then using the usageMetadata attribute on the response object to get the following:
+
+The separate token counts of the input (promptTokenCount) and the output (candidatesTokenCount)
+The total number of tokens in both the input and the output (totalTokenCount)
+
+// Make sure to include the following import:
+// import {GoogleGenAI} from '@google/genai';
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const prompt = "The quick brown fox jumps over the lazy dog.";
+const countTokensResponse = await ai.models.countTokens({
+  model: "gemini-2.0-flash",
+  contents: prompt,
+});
+console.log(countTokensResponse.totalTokens);
+
+const generateResponse = await ai.models.generateContent({
+  model: "gemini-2.0-flash",
+  contents: prompt,
+});
+console.log(generateResponse.usageMetadata);
+
+Count multi-turn (chat) tokens
+If you call countTokens with the chat history, it returns the total token count of the text from each role in the chat (totalTokens).
+
+Another option is calling sendMessage and then using the usageMetadata attribute on the response object to get the following:
+
+The separate token counts of the input (promptTokenCount) and the output (candidatesTokenCount)
+The total number of tokens in both the input and the output (totalTokenCount)
+To understand how big your next conversational turn will be, you need to append it to the history when you call countTokens.
+
+
+// Make sure to include the following import:
+// import {GoogleGenAI} from '@google/genai';
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+// Initial chat history.
+const history = [
+  { role: "user", parts: [{ text: "Hi my name is Bob" }] },
+  { role: "model", parts: [{ text: "Hi Bob!" }] },
+];
+const chat = ai.chats.create({
+  model: "gemini-2.0-flash",
+  history: history,
+});
+
+// Count tokens for the current chat history.
+const countTokensResponse = await ai.models.countTokens({
+  model: "gemini-2.0-flash",
+  contents: chat.getHistory(),
+});
+console.log(countTokensResponse.totalTokens);
+
+const chatResponse = await chat.sendMessage({
+  message: "In one sentence, explain how a computer works to a young child.",
+});
+console.log(chatResponse.usageMetadata);
+
+// Add an extra user message to the history.
+const extraMessage = {
+  role: "user",
+  parts: [{ text: "What is the meaning of life?" }],
+};
+const combinedHistory = chat.getHistory();
+combinedHistory.push(extraMessage);
+const combinedCountTokensResponse = await ai.models.countTokens({
+  model: "gemini-2.0-flash",
+  contents: combinedHistory,
+});
+console.log(
+  "Combined history token count:",
+  combinedCountTokensResponse.totalTokens,
+);
+
+Count multimodal tokens
+All input to the Gemini API is tokenized, including text, image files, and other non-text modalities. Note the following high-level key points about tokenization of multimodal input during processing by the Gemini API:
+
+With Gemini 2.0, image inputs with both dimensions <=384 pixels are counted as 258 tokens. Images larger in one or both dimensions are cropped and scaled as needed into tiles of 768x768 pixels, each counted as 258 tokens. Prior to Gemini 2.0, images used a fixed 258 tokens.
+
+Video and audio files are converted to tokens at the following fixed rates: video at 263 tokens per second and audio at 32 tokens per second.
+
+Image files
+If you call countTokens with a text-and-image input, it returns the combined token count of the text and the image in the input only (totalTokens). You can make this call before calling generateContent to check the size of your requests. You can also optionally call countTokens on the text and the file separately.
+
+Another option is calling generateContent and then using the usageMetadata attribute on the response object to get the following:
+
+The separate token counts of the input (promptTokenCount) and the output (candidatesTokenCount)
+The total number of tokens in both the input and the output (totalTokenCount)
+Note: You'll get the same token count if you use a file uploaded using the File API or you provide the file as inline data.
+Example that uses an uploaded image from the File API:
+
+
+// Make sure to include the following import:
+// import {GoogleGenAI} from '@google/genai';
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const prompt = "Tell me about this image";
+const organ = await ai.files.upload({
+  file: path.join(media, "organ.jpg"),
+  config: { mimeType: "image/jpeg" },
+});
+
+const countTokensResponse = await ai.models.countTokens({
+  model: "gemini-2.0-flash",
+  contents: createUserContent([
+    prompt,
+    createPartFromUri(organ.uri, organ.mimeType),
+  ]),
+});
+console.log(countTokensResponse.totalTokens);
+
+const generateResponse = await ai.models.generateContent({
+  model: "gemini-2.0-flash",
+  contents: createUserContent([
+    prompt,
+    createPartFromUri(organ.uri, organ.mimeType),
+  ]),
+});
+console.log(generateResponse.usageMetadata);
+
+Example that provides the image as inline data:
+
+
+// Make sure to include the following import:
+// import {GoogleGenAI} from '@google/genai';
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const prompt = "Tell me about this image";
+const imageBuffer = fs.readFileSync(path.join(media, "organ.jpg"));
+
+// Convert buffer to base64 string.
+const imageBase64 = imageBuffer.toString("base64");
+
+// Build contents using createUserContent and createPartFromBase64.
+const contents = createUserContent([
+  prompt,
+  createPartFromBase64(imageBase64, "image/jpeg"),
+]);
+
+const countTokensResponse = await ai.models.countTokens({
+  model: "gemini-2.0-flash",
+  contents: contents,
+});
+console.log(countTokensResponse.totalTokens);
+
+const generateResponse = await ai.models.generateContent({
+  model: "gemini-2.0-flash",
+  contents: contents,
+});
+console.log(generateResponse.usageMetadata);
+
+Video or audio files
+Audio and video are each converted to tokens at the following fixed rates:
+
+Video: 263 tokens per second
+Audio: 32 tokens per second
+If you call countTokens with a text-and-video/audio input, it returns the combined token count of the text and the video/audio file in the input only (totalTokens). You can make this call before calling generateContent to check the size of your requests. You can also optionally call countTokens on the text and the file separately.
+
+Another option is calling generateContent and then using the usageMetadata attribute on the response object to get the following:
+
+The separate token counts of the input (promptTokenCount) and the output (candidatesTokenCount)
+The total number of tokens in both the input and the output (totalTokenCount)
+Note: You'll get the same token count if you use a file uploaded using the File API or you provide the file as inline data.
+
+// Make sure to include the following import:
+// import {GoogleGenAI} from '@google/genai';
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const prompt = "Tell me about this video";
+let videoFile = await ai.files.upload({
+  file: path.join(media, "Big_Buck_Bunny.mp4"),
+  config: { mimeType: "video/mp4" },
+});
+
+// Poll until the video file is completely processed (state becomes ACTIVE).
+while (!videoFile.state || videoFile.state.toString() !== "ACTIVE") {
+  console.log("Processing video...");
+  console.log("File state: ", videoFile.state);
+  await sleep(5000);
+  videoFile = await ai.files.get({ name: videoFile.name });
+}
+
+const countTokensResponse = await ai.models.countTokens({
+  model: "gemini-2.0-flash",
+  contents: createUserContent([
+    prompt,
+    createPartFromUri(videoFile.uri, videoFile.mimeType),
+  ]),
+});
+console.log(countTokensResponse.totalTokens);
+
+const generateResponse = await ai.models.generateContent({
+  model: "gemini-2.0-flash",
+  contents: createUserContent([
+    prompt,
+    createPartFromUri(videoFile.uri, videoFile.mimeType),
+  ]),
+});
+console.log(generateResponse.usageMetadata);
+
+System instructions and tools
+System instructions and tools also count towards the total token count for the input.
+
+If you use system instructions, the totalTokens count increases to reflect the addition of systemInstruction.
+
+
+  // Make sure to include the following import:
+  // import {GoogleGenAI} from '@google/genai';
+  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+  const prompt = "The quick brown fox jumps over the lazy dog.";
+  const countTokensResponse = await ai.models.countTokens({
+    model: "gemini-2.0-flash",
+    contents: prompt,
+  });
+  console.log(
+    "base_count (no system instruction):",
+    countTokensResponse.totalTokens,
+  );
+
+  // Uncomment if the API gets support for systemInstruction in count_tokens.
+  /*
+  const countTokensWithSysInstResponse = await ai.models.countTokens({
+    model: "gemini-2.0-flash",
+    contents: prompt,
+    config: {systemInstruction: 'You are a cat. Your name is Neko.'},
+  });
+  console.log(
+    "total_tokens (with system instruction):",
+    countTokensWithSysInstResponse.totalTokens,
+  );
+  */
+  return {
+    responseTokenCount: countTokensResponse.totalTokens,
+    // Uncomment if the API gets support for systemInstruction in count_tokens.
+    // sysInstResponseTokenCount: countTokensWithSysInstResponse.totalTokens,
+  };
+}
+
+// Error: tools parameter is not supported in Gemini API.
+export async function tokensTools() {
+  // Make sure to include the following import:
+  // import {GoogleGenAI} from '@google/genai';
+  const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+  const prompt =
+    "I have 57 cats, each owns 44 mittens, how many mittens is that in total?";
+  const countTokensResponse = await ai.models.countTokens({
+    model: "gemini-2.0-flash",
+    contents: prompt,
+  });
+  console.log("total_tokens (no tools):", countTokensResponse.totalTokens);
+
+  // Define function declarations for arithmetic operations.
+  const addDeclaration = {
+    name: "addNumbers",
+    parameters: {
+      type: "object",
+      description: "Return the result of adding two numbers.",
+      properties: {
+        firstParam: {
+          type: "number",
+          description:
+            "The first parameter which can be an integer or a floating point number.",
+        },
+        secondParam: {
+          type: "number",
+          description:
+            "The second parameter which can be an integer or a floating point number.",
+        },
+      },
+      required: ["firstParam", "secondParam"],
+    },
+  };
+
+  const subtractDeclaration = {
+    name: "subtractNumbers",
+    parameters: {
+      type: "object",
+      description:
+        "Return the result of subtracting the second number from the first.",
+      properties: {
+        firstParam: {
+          type: "number",
+          description: "The first parameter.",
+        },
+        secondParam: {
+          type: "number",
+          description: "The second parameter.",
+        },
+      },
+      required: ["firstParam", "secondParam"],
+    },
+  };
+
+  const multiplyDeclaration = {
+    name: "multiplyNumbers",
+    parameters: {
+      type: "object",
+      description: "Return the product of two numbers.",
+      properties: {
+        firstParam: {
+          type: "number",
+          description: "The first parameter.",
+        },
+        secondParam: {
+          type: "number",
+          description: "The second parameter.",
+        },
+      },
+      required: ["firstParam", "secondParam"],
+    },
+  };
+
+  const divideDeclaration = {
+    name: "divideNumbers",
+    parameters: {
+      type: "object",
+      description:
+        "Return the quotient of dividing the first number by the second.",
+      properties: {
+        firstParam: {
+          type: "number",
+          description: "The first parameter.",
+        },
+        secondParam: {
+          type: "number",
+          description: "The second parameter.",
+        },
+      },
+      required: ["firstParam", "secondParam"],
+    },
+  };
+
+  const tools = {
+    functionDeclarations: [
+      addDeclaration,
+      subtractDeclaration,
+      multiplyDeclaration,
+      divideDeclaration,
+    ],
+  };
+
+  // Uncomment if the API gets support for tools in count_tokens.
+  /*
+  const countTokensWithToolsResponse = await ai.models.countTokens({
+    model: "gemini-2.0-flash",
+    contents: prompt,
+    config: { tools: tools }
+  });
+  console.log("total_tokens (with tools):", countTokensWithToolsResponse.totalTokens);
+  */
+  return {
+    responseTokenCount: countTokensResponse.totalTokens,
+    // Uncomment if the API gets support for tools in count_tokens.
+    // toolsResponseTokenCount : countTokensWithToolsResponse.totalTokens
+  };
+}
+
+If you use function calling, the totalTokens count increases to reflect the addition of tools.
+
+
+// Make sure to include the following import:
+// import {GoogleGenAI} from '@google/genai';
+const ai = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+const prompt =
+  "I have 57 cats, each owns 44 mittens, how many mittens is that in total?";
+const countTokensResponse = await ai.models.countTokens({
+  model: "gemini-2.0-flash",
+  contents: prompt,
+});
+console.log("total_tokens (no tools):", countTokensResponse.totalTokens);
+
+// Define function declarations for arithmetic operations.
+const addDeclaration = {
+  name: "addNumbers",
+  parameters: {
+    type: "object",
+    description: "Return the result of adding two numbers.",
+    properties: {
+      firstParam: {
+        type: "number",
+        description:
+          "The first parameter which can be an integer or a floating point number.",
+      },
+      secondParam: {
+        type: "number",
+        description:
+          "The second parameter which can be an integer or a floating point number.",
+      },
+    },
+    required: ["firstParam", "secondParam"],
+  },
+};
+
+const subtractDeclaration = {
+  name: "subtractNumbers",
+  parameters: {
+    type: "object",
+    description:
+      "Return the result of subtracting the second number from the first.",
+    properties: {
+      firstParam: {
+        type: "number",
+        description: "The first parameter.",
+      },
+      secondParam: {
+        type: "number",
+        description: "The second parameter.",
+      },
+    },
+    required: ["firstParam", "secondParam"],
+  },
+};
+
+const multiplyDeclaration = {
+  name: "multiplyNumbers",
+  parameters: {
+    type: "object",
+    description: "Return the product of two numbers.",
+    properties: {
+      firstParam: {
+        type: "number",
+        description: "The first parameter.",
+      },
+      secondParam: {
+        type: "number",
+        description: "The second parameter.",
+      },
+    },
+    required: ["firstParam", "secondParam"],
+  },
+};
+
+const divideDeclaration = {
+  name: "divideNumbers",
+  parameters: {
+    type: "object",
+    description:
+      "Return the quotient of dividing the first number by the second.",
+    properties: {
+      firstParam: {
+        type: "number",
+        description: "The first parameter.",
+      },
+      secondParam: {
+        type: "number",
+        description: "The second parameter.",
+      },
+    },
+    required: ["firstParam", "secondParam"],
+  },
+};
+
+const tools = {
+  functionDeclarations: [
+    addDeclaration,
+    subtractDeclaration,
+    multiplyDeclaration,
+    divideDeclaration,
+  ],
+};
+
+// Uncomment if the API gets support for tools in count_tokens.
+/*
+const countTokensWithToolsResponse = await ai.models.countTokens({
+  model: "gemini-2.0-flash",
+  contents: prompt,
+  config: { tools: tools }
+});
+console.log("total_tokens (with tools):", countTokensWithToolsResponse.totalTokens);
+*/
+
+
+Safety settings
+
+The Gemini API provides safety settings that you can adjust during the prototyping stage to determine if your application requires more or less restrictive safety configuration. You can adjust these settings across four filter categories to restrict or allow certain types of content.
+
+This guide covers how the Gemini API handles safety settings and filtering and how you can change the safety settings for your application.
+
+Note: Applications that use less restrictive safety settings may be subject to review. See the Terms of Service for more information.
+Safety filters
+The Gemini API's adjustable safety filters cover the following categories:
+
+Category	Description
+Harassment	Negative or harmful comments targeting identity and/or protected attributes.
+Hate speech	Content that is rude, disrespectful, or profane.
+Sexually explicit	Contains references to sexual acts or other lewd content.
+Dangerous	Promotes, facilitates, or encourages harmful acts.
+Civic integrity	Election-related queries.
+These categories are defined in HarmCategory. The Gemini models only support HARM_CATEGORY_HARASSMENT, HARM_CATEGORY_HATE_SPEECH, HARM_CATEGORY_SEXUALLY_EXPLICIT, HARM_CATEGORY_DANGEROUS_CONTENT, and HARM_CATEGORY_CIVIC_INTEGRITY. All other categories are used only by PaLM 2 (Legacy) models.
+You can use these filters to adjust what's appropriate for your use case. For example, if you're building video game dialogue, you may deem it acceptable to allow more content that's rated as Dangerous due to the nature of the game.
+
+In addition to the adjustable safety filters, the Gemini API has built-in protections against core harms, such as content that endangers child safety. These types of harm are always blocked and cannot be adjusted.
+
+Content safety filtering level
+The Gemini API categorizes the probability level of content being unsafe as HIGH, MEDIUM, LOW, or NEGLIGIBLE.
+
+The Gemini API blocks content based on the probability of content being unsafe and not the severity. This is important to consider because some content can have low probability of being unsafe even though the severity of harm could still be high. For example, comparing the sentences:
+
+The robot punched me.
+The robot slashed me up.
+The first sentence might result in a higher probability of being unsafe, but you might consider the second sentence to be a higher severity in terms of violence. Given this, it is important that you carefully test and consider what the appropriate level of blocking is needed to support your key use cases while minimizing harm to end users.
+
+Safety filtering per request
+You can adjust the safety settings for each request you make to the API. When you make a request, the content is analyzed and assigned a safety rating. The safety rating includes the category and the probability of the harm classification. For example, if the content was blocked due to the harassment category having a high probability, the safety rating returned would have category equal to HARASSMENT and harm probability set to HIGH.
+
+By default, safety settings block content (including prompts) with medium or higher probability of being unsafe across any filter. This baseline safety is designed to work for most use cases, so you should only adjust your safety settings if it's consistently required for your application.
+
+The following table describes the block settings you can adjust for each category. For example, if you set the block setting to Block few for the Hate speech category, everything that has a high probability of being hate speech content is blocked. But anything with a lower probability is allowed.
+
+Threshold (Google AI Studio)	Threshold (API)	Description
+Block none	BLOCK_NONE	Always show regardless of probability of unsafe content
+Block few	BLOCK_ONLY_HIGH	Block when high probability of unsafe content
+Block some	BLOCK_MEDIUM_AND_ABOVE	Block when medium or high probability of unsafe content
+Block most	BLOCK_LOW_AND_ABOVE	Block when low, medium or high probability of unsafe content
+N/A	HARM_BLOCK_THRESHOLD_UNSPECIFIED	Threshold is unspecified, block using default threshold
+If the threshold is not set, the default block threshold is Block none (for gemini-1.5-pro-002 and gemini-1.5-flash-002 and all newer stable GA models) or Block some (in all other models) for all categories except the Civic integrity category.
+
+The default block threshold for the Civic integrity category is Block none (for gemini-2.0-flash-001 aliased as gemini-2.0-flash, gemini-2.0-pro-exp-02-05, and gemini-2.0-flash-lite) both for Google AI Studio and the Gemini API, and Block most for all other models in Google AI Studio only.
+
+You can set these settings for each request you make to the generative service. See the HarmBlockThreshold API reference for details.
+
+Safety feedback
+generateContent returns a GenerateContentResponse which includes safety feedback.
+
+Prompt feedback is included in promptFeedback. If promptFeedback.blockReason is set, then the content of the prompt was blocked.
+
+Response candidate feedback is included in Candidate.finishReason and Candidate.safetyRatings. If response content was blocked and the finishReason was SAFETY, you can inspect safetyRatings for more details. The content that was blocked is not returned.
+
+Adjust safety settings
+This section covers how to adjust the safety settings in both Google AI Studio and in your code.
+
+Google AI Studio
+You can adjust safety settings in Google AI Studio, but you cannot turn them off.
+
+Click Edit safety settings in the Run settings panel to open the Run safety settings modal. In the modal, you can use the sliders to adjust the content filtering level per safety category:
+
+
+
+Note: If you set any of the category filters to Block none, Google AI Studio will display a reminder about the Gemini API's Terms of Service with respect to safety settings.
+When you send a request (for example, by asking the model a question), a warning No Content message appears if the request's content is blocked. To see more details, hold the pointer over the No Content text and click warning Safety.
+
+Gemini API SDKs
+The following code snippet shows how to set safety settings in your GenerateContent call. This sets the thresholds for the harassment (HARM_CATEGORY_HARASSMENT) and hate speech (HARM_CATEGORY_HATE_SPEECH) categories. For example, setting these categories to BLOCK_LOW_AND_ABOVE blocks any content that has a low or higher probability of being harassment or hate speech. To understand the threshold settings, see Safety filtering per request.
+
+Python
+Go
+JavaScript
+Dart (Flutter)
+Kotlin
+Java
+REST
+
+import { GoogleGenAI } from "@google/genai";
+
+const ai = new GoogleGenAI({ apiKey: "GEMINI_API_KEY" });
+
+const safetySettings = [
+  {
+    category: "HARM_CATEGORY_HARASSMENT",
+    threshold: "BLOCK_LOW_AND_ABOVE",
+  },
+  {
+    category: "HARM_CATEGORY_HATE_SPEECH",
+    threshold: "BLOCK_LOW_AND_ABOVE",
+  },
+];
+
+async function main() {
+  const response = await ai.models.generateContent({
+    model: "gemini-2.0-flash",
+    contents: "Some potentially unsafe prompt.",
+    config: {
+      safetySettings: safetySettings,
+    },
+  });
+  console.log(response.text);
+}
+
+await main();
+Next steps
+See the API reference to learn more about the full API.
+Review the safety guidance for a general look at safety considerations when developing with LLMs.
+Learn more about assessing probability versus severity from the Jigsaw team
+Learn more about the products that contribute to safety solutions like the Perspective API. * You can use these safety settings to create a toxicity classifier. See the classification example to get started.
+
+
+Home
+Gemini API
+Models
+Was this helpful?
+
+Send feedbackUse Gemini thinking
+
+Gemini 2.5 Pro Experimental and Gemini 2.0 Flash Thinking Experimental are models that use an internal "thinking process" during response generation. This process contributes to their improved reasoning capabilities and allows them to solve complex tasks. This guide shows you how to use Gemini models with thinking capabilities.
+
+Try Gemini 2.5 Pro Experimental in Google AI Studio
+Use thinking models
+Models with thinking capabilities are available in Google AI Studio and through the Gemini API. Note that the thinking process is visible within Google AI Studio but is not provided as part of the API output.
+
+Send a basic request
+Python
+JavaScript
+Go
+REST
+
+import { GoogleGenAI } from "@google/genai";
+
+const ai = new GoogleGenAI({ apiKey: "GEMINI_API_KEY" });
+
+async function main() {
+  const prompt = "Explain the concept of Occam's Razor and provide a simple, everyday example.";
+
+  const response = await ai.models.generateContent({
+    model: "gemini-2.5-pro-exp-03-25",  // or gemini-2.0-flash-thinking-exp
+    contents: prompt,
+  });
+
+  console.log(response.text);
+}
+
+main();
+Multi-turn thinking conversations
+To take the previous chat history into account, you can use multi-turn conversations.
+
+With the SDKs, you can create a chat session to manage the state of the conversation.
+
+Python
+JavaScript
+
+import { GoogleGenAI } from "@google/genai";
+
+const ai = new GoogleGenAI({ apiKey: "GEMINI_API_KEY" });
+
+async function main() {
+    const chat = ai.chats.create({
+        model: 'gemini-2.5-pro-exp-03-25'  // or gemini-2.0-flash-thinking-exp
+    });
+
+    const response = await chat.sendMessage({
+        message: 'What is your name?'
+    });
+    console.log(response.text);
+
+    response = await chat.sendMessage({
+        message: 'What did you just say before this?'
+    });
+    console.log(response.text);
+}
+
+main();
+What's next?
+Try Gemini 2.5 Pro Experimental in Google AI Studio.
+Learn more about Prompting for thinking models.
+For more info about Gemini 2.5 Pro Experimental and Gemini Flash 2.0 Thinking, see the model page.
+Try more examples in the Thinking cookbook.
