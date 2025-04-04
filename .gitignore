@@ -28,3 +28,6 @@ arxiv_downloads/
 # OS specific files
 .DS_Store
 Thumbs.db
+
+# API key files
+geminiAPI.txt
